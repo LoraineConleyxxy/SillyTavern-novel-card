@@ -1,6 +1,6 @@
 {
   "title": "SillyTavern Novel Card",
-  "generated_at": "2026-06-26T03:20:10.957269+00:00",
+  "generated_at": "2026-06-26T03:22:54.804493+00:00",
   "public_scope": "成品 PNG、页面 JSON、公开说明；不包含原文、构建脚本、来源对照或本机路径。",
   "count": 19,
   "cards": [
@@ -270,7 +270,7 @@
       ],
       "worldbook_entries": 54,
       "regex_count": 3,
-      "opening_count": 41,
+      "opening_count": 40,
       "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.3：对齐深渊魔帝 v1.64 六条蓝灯契约；新增状态栏/下一章双按钮、40 个开局强关联节点、男主视角男性 NPC 档案过滤和自然年龄措辞清理。"
@@ -340,7 +340,7 @@
       ],
       "worldbook_entries": 64,
       "regex_count": 3,
-      "opening_count": 49,
+      "opening_count": 48,
       "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.0：合并三篇连续文本，48 个源文切片开局；男性视角默认选中并折叠其他男性；六条蓝灯、阶段强关联、状态栏下一章/跳转按钮齐全。"
@@ -523,7 +523,7 @@
       ],
       "worldbook_entries": 49,
       "regex_count": 3,
-      "opening_count": 35,
+      "opening_count": 34,
       "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.1：新建 34 个源文切片开局，淡化原反派男性为男主视角可接管槽位，删除官方最终篇反杀线；六条蓝灯、阶段强关联、状态栏下一章/跳转按钮齐全。"
