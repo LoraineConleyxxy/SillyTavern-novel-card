@@ -1,6 +1,6 @@
 {
   "title": "SillyTavern Novel Card",
-  "generated_at": "2026-06-26T03:00:30.171672+00:00",
+  "generated_at": "2026-06-26T03:20:10.957269+00:00",
   "public_scope": "成品 PNG、页面 JSON、公开说明；不包含原文、构建脚本、来源对照或本机路径。",
   "count": 19,
   "cards": [
@@ -92,7 +92,7 @@
       "worldbook_entries": 81,
       "regex_count": 3,
       "opening_count": 62,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.1：更换为月下仙侠双人封面；保留 62 个源文开局、六条蓝灯、逐节点前情继承、当前锚点、下一章/跳转按钮与视角折叠规则。"
     },
@@ -141,7 +141,7 @@
       "worldbook_entries": 60,
       "regex_count": 3,
       "opening_count": 40,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.3：对齐最新阶段节点规则，删除旧 0 楼正文指向和其他补充残留；状态栏补 view_key，推进按钮改为短键驱动。"
     },
@@ -173,7 +173,7 @@
       "worldbook_entries": 82,
       "regex_count": 3,
       "opening_count": 35,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.0：新建 35 个源文切片开局、六条蓝灯、逐节点前情继承、当前锚点、下一章/跳转按钮与视角折叠规则；封面为双人宅邸淑女风。"
     },
@@ -271,7 +271,7 @@
       "worldbook_entries": 54,
       "regex_count": 3,
       "opening_count": 41,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.3：对齐深渊魔帝 v1.64 六条蓝灯契约；新增状态栏/下一章双按钮、40 个开局强关联节点、男主视角男性 NPC 档案过滤和自然年龄措辞清理。"
     },
@@ -308,7 +308,7 @@
       "worldbook_entries": 95,
       "regex_count": 3,
       "opening_count": 51,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.68：替换阶段推进蓝灯里的旧式窄节拍措辞，统一为“当前节点内演绎”；保留 v1.67 状态栏双按钮契约。"
     },
@@ -341,7 +341,7 @@
       "worldbook_entries": 64,
       "regex_count": 3,
       "opening_count": 49,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.0：合并三篇连续文本，48 个源文切片开局；男性视角默认选中并折叠其他男性；六条蓝灯、阶段强关联、状态栏下一章/跳转按钮齐全。"
     },
@@ -374,7 +374,7 @@
       "worldbook_entries": 64,
       "regex_count": 3,
       "opening_count": 43,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.1：更换为双人百合人物照封面；保留 43 个源文开局、六条蓝灯、逐节点前情继承、状态栏双按钮与男主视角 折叠规则。"
     },
@@ -617,7 +617,7 @@
       "worldbook_entries": 65,
       "regex_count": 3,
       "opening_count": 42,
-      "has_statusbar": false,
+      "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.35：男主视角写入隐藏视角键；周源档案只在第三人称/女主视角触发，男主视角只保留阶段与开局强关联。"
     }
