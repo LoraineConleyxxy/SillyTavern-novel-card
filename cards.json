@@ -1,8 +1,8 @@
 {
   "title": "SillyTavern Novel Card",
-  "generated_at": "2026-06-26T03:22:54.804493+00:00",
+  "generated_at": "2026-06-30T15:03:34.759775+00:00",
   "public_scope": "成品 PNG、页面 JSON、公开说明；不包含原文、构建脚本、来源对照或本机路径。",
-  "count": 19,
+  "count": 20,
   "cards": [
     {
       "id": "三千劫后，继承绝色仙子们的调教契约",
@@ -144,6 +144,37 @@
       "has_statusbar": true,
       "has_two_buttons": true,
       "notes": "【当前版本】v1.3：对齐最新阶段节点规则，删除旧 0 楼正文指向和其他补充残留；状态栏补 view_key，推进按钮改为短键驱动。"
+    },
+    {
+      "id": "堕淫之魔法少女优卡莉茜娅",
+      "title": "堕淫之魔法少女优卡莉茜娅 v1.0",
+      "project": "风羽飘零_堕淫之魔法少女优卡莉茜娅",
+      "version": "1.0",
+      "version_dir": "更新v1.0",
+      "file": "cards/堕淫之魔法少女优卡莉茜娅/堕淫之魔法少女优卡莉茜娅_v1.0.png",
+      "doc": "docs/堕淫之魔法少女优卡莉茜娅.md",
+      "size_bytes": 3521303,
+      "updated_at": "2026-06-30T15:03:33.776126+00:00",
+      "spec": "chara_card_v3",
+      "character_version": "1.0",
+      "tags": [
+        "中文",
+        "Pixiv",
+        "魔法少女",
+        "轮回",
+        "恶堕线",
+        "多开局",
+        "男主视角",
+        "阶段强关联",
+        "状态栏",
+        "v1.0"
+      ],
+      "worldbook_entries": 62,
+      "regex_count": 3,
+      "opening_count": 48,
+      "has_statusbar": true,
+      "has_two_buttons": true,
+      "notes": "【当前版本】v1.0：48 个源文切片开局；默认男主视角，男性动作槽折叠为玩家侧角色；六条蓝灯、阶段强关联、状态栏下一章/跳转按钮齐全。"
     },
     {
       "id": "大小姐与女仆的淑女拘束",
@@ -438,16 +469,16 @@
     },
     {
       "id": "触手游戏与魔女一起",
-      "title": "触手游戏与魔女一起 v1.1",
+      "title": "触手游戏与魔女一起 v1.2",
       "project": "おさかな_触手游戏与魔女一起",
-      "version": "1.1",
-      "version_dir": "更新v1.1",
-      "file": "cards/触手游戏与魔女一起/触手游戏与魔女一起_v1.1.png",
+      "version": "1.2",
+      "version_dir": "更新v1.2",
+      "file": "cards/触手游戏与魔女一起/触手游戏与魔女一起_v1.2.png",
       "doc": "docs/触手游戏与魔女一起.md",
-      "size_bytes": 554497,
-      "updated_at": "2026-06-25T13:57:22.875754+00:00",
+      "size_bytes": 3622971,
+      "updated_at": "2026-06-26T03:47:24.307864+00:00",
       "spec": "chara_card_v3",
-      "character_version": "1.1",
+      "character_version": "1.2",
       "tags": [
         "魔女",
         "TS",
@@ -455,14 +486,14 @@
         "多开局",
         "阶段控制",
         "状态栏",
-        "v1.1"
+        "v1.2"
       ],
       "worldbook_entries": 26,
       "regex_count": 3,
       "opening_count": 15,
       "has_statusbar": true,
       "has_two_buttons": true,
-      "notes": "【当前版本】v1.1：将 15 个开局正文改为全中文翻译/改写稿；保留 v1.0 的六条蓝灯、逐节点二次总结、当前场景锚点、状态栏双按钮和三视角面板。"
+      "notes": "【当前版本】v1.2：更新二次元魔女封面，人物居中并保留头像裁切安全边距；保留 v1.1 的 15 个全中文开局、六条蓝灯、逐节点二次总结、状态栏双按钮和三视角面板。"
     },
     {
       "id": "陈紫和快感的愉悦日常",
