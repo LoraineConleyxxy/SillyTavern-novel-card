@@ -6,6 +6,7 @@
 - **目录数据索引**：`cards.json` / `catalog.js`
 - **单作品卷宗说明**：`docs/*.md`
 - **早期服务器归档直链包**：`downloads/*.png`（仅限老服务器 / 旅程服务器经典归档卡）
+- **v3.0 制卡 Agent Skill**：[`skills/sillytavern-pixiv-card/`](skills/sillytavern-pixiv-card/)（分幕开局提取、阶段解耦世界书、0 楼交互面板与剧情控制状态栏规范及参考模板）
 
 > **分发说明**：
 > 1. **类脑新服务器发布作品**：网页端仅展示故事总介绍、登场人物与章节节点概览，不存放卡片文件，点击「前往 Discord」直达对应发布帖获取。

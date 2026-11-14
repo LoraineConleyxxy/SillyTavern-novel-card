@@ -1,0 +1,858 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --bg-root: #110f0d;
+  --bg-panel: #181512;
+  --bg-card: #201c17;
+  --bg-card-hover: #29231d;
+  --bg-elevated: #14110e;
+  --border: #3a3126;
+  --border-subtle: #2b241c;
+  --gold: #c9a84c;
+  --gold-light: #e6d39e;
+  --gold-dim: #8a7132;
+  --crimson: #9e3e32;
+  --crimson-light: #d87a6c;
+  --text-main: #ebe1d1;
+  --text-sub: #b5a792;
+  --text-muted: #7d7161;
+  --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: transparent;
+  color: var(--text-main);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.eil-shell {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: linear-gradient(165deg, #1a1612 0%, #14110e 60%, #191512 100%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.48);
+  overflow: hidden;
+}
+.eil-topline {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold-light), var(--gold-dim), transparent);
+  opacity: 0.85;
+}
+.eil-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.08), transparent 70%);
+}
+.eil-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.eil-brand-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 2px;
+}
+.eil-brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: rgba(20, 17, 14, 0.6);
+}
+.eil-summary-pill {
+  font-size: 11.5px;
+  color: var(--gold-light);
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 999px;
+  padding: 3px 11px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.eil-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.sec-label {
+  font-size: 11.5px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.sec-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Mode Selector Cards */
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.mode-card {
+  position: relative;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.mode-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--gold-dim);
+}
+.mode-card.active {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.11);
+  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.25);
+}
+.mode-card .m-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--gold-dim);
+  display: block;
+  margin-bottom: 2px;
+}
+.mode-card.active .m-tag { color: var(--gold); }
+.mode-card .m-name {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: block;
+  margin-bottom: 3px;
+}
+.mode-card.active .m-name { color: var(--gold-light); }
+.mode-card .m-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: block;
+}
+.mode-card.active .m-desc { color: var(--text-sub); }
+
+/* Sub-bar for Free Mode NPC Policy */
+.npc-bar {
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  border: 1px dashed var(--border);
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.npc-bar-label {
+  font-size: 11.5px;
+  color: var(--text-sub);
+}
+.npc-bar-label b {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+.npc-switch {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.npc-btn {
+  padding: 5px 11px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-sub);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+}
+.npc-btn:hover { border-color: var(--gold-dim); color: var(--text-main); }
+.npc-btn.active {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.15);
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+/* Route Tabs */
+.route-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.route-tab {
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-sub);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+}
+.route-tab:hover {
+  border-color: var(--gold-dim);
+  color: var(--text-main);
+}
+.route-tab.active {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.14);
+  color: var(--gold-light);
+  font-weight: 600;
+}
+.route-tab .rt-cnt {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+.route-tab.active .rt-cnt { color: var(--gold); }
+
+/* Master-Detail Browser */
+.browser-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 12px;
+  height: 330px;
+}
+.node-list {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  overflow-y: auto;
+  padding: 4px;
+}
+.node-list::-webkit-scrollbar, .detail-scroll::-webkit-scrollbar { width: 5px; }
+.node-list::-webkit-scrollbar-thumb, .detail-scroll::-webkit-scrollbar-thumb {
+  background: #3d3428;
+  border-radius: 3px;
+}
+.node-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  margin-bottom: 2px;
+}
+.node-item:hover { background: var(--bg-card-hover); }
+.node-item.active {
+  background: rgba(201, 168, 76, 0.13);
+  border-left-color: var(--gold);
+}
+.node-idx {
+  font-family: 'Times New Roman', serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 20px;
+}
+.node-code {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-light);
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 4px;
+  padding: 0 5px;
+  min-width: 34px;
+  text-align: center;
+}
+.node-main {
+  flex: 1;
+  min-width: 0;
+}
+.node-title {
+  font-size: 12.5px;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.node-item.active .node-title {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+.node-loc {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Detail Card */
+.detail-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.detail-head {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(201, 168, 76, 0.04);
+}
+.detail-title {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 5px;
+}
+.detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.d-chip {
+  font-size: 10.5px;
+  color: var(--text-sub);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+.d-chip b {
+  color: var(--gold);
+  font-weight: 600;
+  margin-right: 3px;
+}
+.detail-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.d-block-title {
+  font-size: 10.5px;
+  color: var(--gold-dim);
+  letter-spacing: 1.5px;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+.d-events {
+  padding-left: 16px;
+  font-size: 11.5px;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+.d-events li { margin-bottom: 2px; }
+.d-excerpt {
+  font-family: var(--serif);
+  font-size: 12.5px;
+  color: var(--text-main);
+  line-height: 1.75;
+  background: rgba(17, 15, 13, 0.65);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 10px;
+  white-space: pre-wrap;
+}
+
+/* Custom Note Drawer */
+.note-details {
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: var(--bg-elevated);
+  padding: 7px 12px;
+}
+.note-details summary {
+  cursor: pointer;
+  font-size: 11.5px;
+  color: var(--text-sub);
+  user-select: none;
+}
+.note-details summary:hover { color: var(--gold-light); }
+.note-textarea {
+  margin-top: 7px;
+  width: 100%;
+  height: 64px;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-root);
+  color: var(--text-main);
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.5;
+}
+.note-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Footer Action Bar */
+.eil-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(17, 15, 13, 0.7);
+}
+.foot-info {
+  font-size: 11.5px;
+  color: var(--text-sub);
+  min-width: 0;
+  flex: 1;
+}
+.foot-info b { color: var(--gold-light); font-weight: 600; }
+.btn-launch {
+  padding: 9px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, #3b2d16 0%, #5c441e 100%);
+  color: var(--gold-light);
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-launch:hover {
+  background: linear-gradient(135deg, #4d3b1d 0%, #735526 100%);
+  box-shadow: 0 0 16px rgba(201, 168, 76, 0.28);
+}
+.btn-back {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-sub);
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-back:hover { border-color: var(--gold-dim); color: var(--text-main); }
+
+@media (max-width: 660px) {
+  .mode-grid { grid-template-columns: 1fr; }
+  .browser-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .node-list { max-height: 210px; }
+  .detail-card { max-height: 280px; }
+  .eil-foot { flex-direction: column; align-items: stretch; }
+  .btn-launch { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="eil-shell">
+  <div class="eil-topline"></div>
+  <div class="eil-head">
+    <div class="eil-brand">
+      <span class="eil-brand-title">深渊魔帝艾拉蒂雅</span>
+      <span class="eil-brand-sub">VER 3.0 · 全六卷 70 节点完整版</span>
+    </div>
+    <div class="eil-summary-pill" id="status">自由探索(可截胡) · 01 【R1】便器总督的就职仪式</div>
+  </div>
+
+  <div class="eil-body">
+    <div>
+      <div class="sec-head">
+        <span class="sec-label">壹 · 叙事视角与沙盒规则</span>
+        <span class="sec-hint">自由探索模式下无需预设身份，首轮回复直接书写登场即可</span>
+      </div>
+      <div class="mode-grid">
+        <button type="button" class="mode-card active" onclick="setViewpoint('free')" id="btn-free">
+          <span class="m-tag">SANDBOX MODE</span>
+          <span class="m-name">自由探索 · 沙盒介入</span>
+          <span class="m-desc">以独立变数入场，可自由探索、截胡宝珠、救赎或支配众女角，随时改写原著走向</span>
+        </button>
+        <button type="button" class="mode-card" onclick="setViewpoint('male')" id="btn-male">
+          <span class="m-tag">CONQUEROR POV</span>
+          <span class="m-name">男主视角 · 宿命征服</span>
+          <span class="m-desc">直接取代原著主导者，执掌爱欲魔神宝珠，亲手将高傲魔帝一步步拉下神坛</span>
+        </button>
+        <button type="button" class="mode-card" onclick="setViewpoint('female')" id="btn-female">
+          <span class="m-tag">EMPRESS POV</span>
+          <span class="m-name">女主视角 · 深渊魔帝</span>
+          <span class="m-desc">代入魔帝艾拉蒂雅本人（自称「余」），亲历至高尊严与身体异变间的拉扯</span>
+        </button>
+      </div>
+
+      <div class="npc-bar" id="npcModeBox">
+        <span class="npc-bar-label"><b>原著反派设定</b>（弗弗拉奇 / 加扎克 / 图兹等）：</span>
+        <div class="npc-switch">
+          <button type="button" class="npc-btn active" onclick="setNpcMode('keep')" id="btn-npc-keep">保留为普通 NPC（可截胡夺宝 / 可击杀）</button>
+          <button type="button" class="npc-btn" onclick="setNpcMode('erase')" id="btn-npc-erase">清退原著反派（独享舞台与主导权）</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">
+        <span class="sec-label">贰 · 篇章卷宗筛选</span>
+        <span class="sec-hint" id="listLabel">当前显示：remake序幕 (R1-R11)</span>
+      </div>
+      <div class="route-tabs" id="chapterTabs"></div>
+    </div>
+
+    <div class="browser-grid">
+      <div class="node-list" id="entryList"></div>
+      <div class="detail-card" id="previewBox"></div>
+    </div>
+
+    <details class="note-details">
+      <summary>叁 · 开局附注与自定义说明（可选，点击展开修改）</summary>
+      <textarea class="note-textarea" id="playerInfo"></textarea>
+    </details>
+  </div>
+
+  <div class="eil-foot">
+    <div class="foot-info" id="footInfo">已选节点：<b>R1 · 便器总督的就职仪式</b></div>
+    <button type="button" class="btn-launch" onclick="startGame()" id="btnStart">踏入此节点 · 开启旅程</button>
+    <button type="button" class="btn-back" onclick="goBack()" id="btnBack" style="display:none;">← 返回重新选择开局</button>
+  </div>
+</div>
+
+<script>
+const OPENINGS = __OPENINGS_JSON__;
+const CHAPTERS = __CHAPTERS_JSON__;
+const STAGE_TITLES = __STAGE_TITLES_JSON__;
+const NEXT_STAGE = __NEXT_STAGE_JSON__;
+const PLAYER_INFO_MAP = __PLAYER_INFO_JSON__;
+
+let currentVp = "free";
+let currentNpcMode = "keep";
+let currentTab = 0;
+let currentId = 0;
+let savedOriginalMsg = null;
+
+const U = String.fromCharCode(60) + "user" + String.fromCharCode(62);
+const VP_NAMES = {
+  "male": ["弗弗拉奇", "卡尔珀", "卡塔乌雷", "阿西尔", "扎基厄斯", "阿古曼", "加扎克", "图兹"],
+  "female": ["艾拉蒂雅"]
+};
+const ERASE_MAP = {
+  "弗弗拉奇": "某名早已被肃清的盗匪残党",
+  "卡尔珀": "黑水城叛党",
+  "卡塔乌雷": "商队粗鄙护卫",
+  "阿西尔": "路过佣兵",
+  "扎基厄斯": "捕奴队杂兵",
+  "阿古曼": "审讯室魔物",
+  "加扎克": "地下监狱看守头目",
+  "图兹": "白兔庄园旧主"
+};
+const VP_MAP = {male:{}, female:{}, free:{}};
+for (const k of VP_NAMES.male) VP_MAP.male[k] = U;
+for (const k of VP_NAMES.female) VP_MAP.female[k] = U;
+
+function applyVp(text, vp, npcMode) {
+  let r = text;
+  if (vp === "free" && npcMode === "erase") {
+    for (const k of Object.keys(ERASE_MAP).sort((a,b)=>b.length-a.length)) {
+      r = r.split(k).join(ERASE_MAP[k]);
+    }
+    return r;
+  }
+  const m = VP_MAP[vp] || {};
+  for (const k of Object.keys(m).sort((a,b)=>b.length-a.length))
+    r = r.split(k).join(m[k]);
+  return r;
+}
+
+function buildFreeEntryHook(o, npcMode) {
+  const N = String.fromCharCode(10);
+  if (npcMode === "erase") {
+    return N + N + "---" + N +
+      "【自由探索·独享舞台切入（当前地点：" + o.location + "）】" + N +
+      "此时此刻，「" + o.code + "·" + o.short_title + "」的局势正停留在这一幕。场中并无任何其他雄性主宰者能够左右深渊魔帝艾拉蒂雅与众女角的命运，一切原有的危机与因果都悬而未决。" + N +
+      "而真正的唯一变数——" + U + "，已经来到了现场。" + N +
+      "（请在下一轮回复中直接写出你的身份、能力与出场行动：无论是亲手接管场中局势、以支配者或救赎者姿态介入，还是带她自由探索这片天地，世界都将随你的行动实时演进。）";
+  }
+  return N + N + "---" + N +
+    "【自由探索·沙盒舞台切入（当前地点：" + o.location + "）】" + N +
+    "此时此刻，「" + o.code + "·" + o.short_title + "」的局势正停留在这一幕。" + N +
+    "而独立于原著因果之外的真正变数——" + U + "，已经来到了现场。" + N +
+    "（请在下一轮回复中直接写出你的身份、立场与出场方式：无论是强势出手截胡夺取宝珠、击败或驱逐原著反派、救下女角，还是暗中布局改写剧情走向，在场所有角色都将对你的介入做出即时反应。）";
+}
+
+function escH(s) {
+  var A = String.fromCharCode(38);
+  return String(s == null ? "" : s).split(A).join(A+"amp;").split("<").join(A+"lt;").split(">").join(A+"gt;").split('"').join(A+"quot;");
+}
+
+function filteredIds() {
+  const ch = CHAPTERS[currentTab] || CHAPTERS[0];
+  const res = [];
+  for (let i = ch.min; i <= ch.max; i++) {
+    if (OPENINGS[i]) res.push(i);
+  }
+  return res;
+}
+
+function renderChapterTabs() {
+  let h = "";
+  for (let i = 0; i < CHAPTERS.length; i++) {
+    const ch = CHAPTERS[i];
+    const act = i === currentTab;
+    const cnt = ch.max - ch.min + 1;
+    h += '<button type="button" class="route-tab'+(act?' active':'')+'" onclick="selectTab('+i+')">'+escH(ch.name)+'<span class="rt-cnt">'+cnt+'</span></button>';
+  }
+  document.getElementById("chapterTabs").innerHTML = h;
+}
+
+function renderList() {
+  renderChapterTabs();
+  const ids = filteredIds();
+  const ch = CHAPTERS[currentTab] || CHAPTERS[0];
+  document.getElementById("listLabel").textContent = "当前卷宗：" + ch.name + "（共 " + ids.length + " 节）";
+  let h = "";
+  for (const id of ids) {
+    const o = OPENINGS[id];
+    const act = id === currentId;
+    const cleanTitle = o.title.replace(/^【[^】]+】/, "");
+    h += '<div class="node-item'+(act?' active':'')+'" onclick="selOp('+id+')">';
+    h += '<span class="node-idx">'+String(id+1).padStart(2,"0")+'</span>';
+    h += '<span class="node-code">'+escH(o.code)+'</span>';
+    h += '<div class="node-main">';
+    h += '<div class="node-title">'+escH(cleanTitle)+'</div>';
+    h += '<div class="node-loc">'+escH(o.location)+'</div>';
+    h += '</div></div>';
+  }
+  document.getElementById("entryList").innerHTML = h;
+  renderPreview();
+}
+
+function renderPreview() {
+  const o = OPENINGS[currentId];
+  if (!o) return;
+  const cleanTitle = o.title.replace(/^【[^】]+】/, "");
+  const evs = Array.isArray(o.events) ? o.events : [];
+  const evHtml = evs.map(e => '<li>' + escH(e) + '</li>').join('');
+  const excerpt = o.body.length > 360 ? o.body.slice(0, 360) + "……" : o.body;
+
+  let h = '<div class="detail-head">';
+  h += '<div class="detail-title">【' + escH(o.code) + '】' + escH(cleanTitle) + '</div>';
+  h += '<div class="detail-chips">';
+  h += '<span class="d-chip"><b>地点</b>' + escH(o.location) + '</span>';
+  h += '<span class="d-chip"><b>状态</b>' + escH(o.stage) + '</span>';
+  h += '<span class="d-chip"><b>着装</b>' + escH(o.equip) + '</span>';
+  h += '</div></div>';
+  h += '<div class="detail-scroll">';
+  if (evHtml) {
+    h += '<div><div class="d-block-title">本节事件脉络（1 → 2 → 3）</div><ol class="d-events">' + evHtml + '</ol></div>';
+  }
+  h += '<div><div class="d-block-title">开场正文预览</div><div class="d-excerpt">' + escH(excerpt) + '</div></div>';
+  h += '</div>';
+  document.getElementById("previewBox").innerHTML = h;
+  const fi = document.getElementById("footInfo");
+  if (fi) fi.innerHTML = '已选节点：<b>' + escH(o.code + ' · ' + o.short_title) + '</b>（' + escH(o.location) + '）';
+}
+
+function selectTab(tabIdx) {
+  currentTab = tabIdx;
+  const ch = CHAPTERS[tabIdx];
+  if (currentId < ch.min || currentId > ch.max) {
+    currentId = ch.min;
+  }
+  updateUI();
+}
+
+function selOp(id) {
+  currentId = id;
+  updateUI();
+}
+
+function isPresetInfo(v) {
+  v = (v || "").trim();
+  return v === "" || Object.values(PLAYER_INFO_MAP).some(p => p.trim() === v);
+}
+
+function currentInfoKey() {
+  if (currentVp === "free") return currentNpcMode === "erase" ? "free_erase" : "free_keep";
+  return currentVp;
+}
+
+function setViewpoint(vp) {
+  currentVp = vp;
+  ["free", "male", "female"].forEach(k => {
+    const b = document.getElementById("btn-" + k);
+    if (b) b.classList.toggle("active", k === vp);
+  });
+  const npcBox = document.getElementById("npcModeBox");
+  if (npcBox) npcBox.style.display = (vp === "free") ? "flex" : "none";
+  const ta = document.getElementById("playerInfo");
+  if (ta && isPresetInfo(ta.value)) ta.value = PLAYER_INFO_MAP[currentInfoKey()];
+  updateUI();
+}
+
+function setNpcMode(mode) {
+  currentNpcMode = mode;
+  ["keep", "erase"].forEach(k => {
+    const b = document.getElementById("btn-npc-" + k);
+    if (b) b.classList.toggle("active", k === mode);
+  });
+  const ta = document.getElementById("playerInfo");
+  if (ta && isPresetInfo(ta.value)) ta.value = PLAYER_INFO_MAP[currentInfoKey()];
+  updateUI();
+}
+
+function effectiveNpcMode() {
+  if (currentVp === "male") return "replaced";
+  if (currentVp === "female") return "keep";
+  return currentNpcMode;
+}
+
+function updateUI() {
+  let vl = "";
+  if (currentVp === "free") {
+    vl = currentNpcMode === "erase" ? "自由探索(清退反派)" : "自由探索(可截胡NPC)";
+  } else if (currentVp === "male") {
+    vl = "男主视角";
+  } else {
+    vl = "女主视角";
+  }
+  const o = OPENINGS[currentId];
+  document.getElementById("status").textContent = vl + " · " + String(currentId+1).padStart(2,"0") + " 【" + o.code + "】" + o.short_title;
+  renderList();
+}
+
+function stageTitle(code) { return STAGE_TITLES[code] || code || ""; }
+function statusTag(close) {
+  const L = String.fromCharCode(91);
+  const R = String.fromCharCode(93);
+  return L + (close ? "/" : "") + "EILATIA_" + "STATUS" + R;
+}
+
+function statusBlock(o) {
+  const code = o.code;
+  const next = NEXT_STAGE[code] || "";
+  const adv = next ? code + "_TO_" + next : "";
+  const npcM = effectiveNpcMode();
+  const N = String.fromCharCode(10);
+  const lines = [
+    "", "",
+    statusTag(false),
+    "stage: " + code,
+    "stage_title: " + stageTitle(code),
+    "stage_key: [[" + "EILATIA_" + "STAGE:" + code + "]]",
+    "opening_key: [[" + "EILATIA_" + "OPENING:" + code + "]]",
+    "view: " + currentVp,
+    "npc_mode: " + npcM,
+    "next_stage: " + next,
+    "next_title: " + stageTitle(next),
+    "advance_id: " + adv,
+    "can_advance: " + (next ? "true" : "false"),
+    statusTag(true)
+  ];
+  return lines.join(N);
+}
+
+function stageBlock(o) {
+  const code = o.code;
+  const npcM = effectiveNpcMode();
+  const L = String.fromCharCode(60);
+  const G = String.fromCharCode(62);
+  const displayNone = "display" + ":" + "none";
+  return "\n\n" + L + "div style=\"" + displayNone + "\"" + G + "\n" +
+    "【开局阶段触发键】\n" +
+    "[[" + "EILATIA_" + "OPENING:" + code + "]]\n" +
+    "[[" + "EILATIA_" + "STAGE:" + code + "]]\n" +
+    "[[" + "EILATIA_" + "VIEW:" + currentVp + "]]\n" +
+    "[[" + "EILATIA_" + "NPC:" + npcM + "]]\n" +
+    "【/开局阶段触发键】\n" +
+    L + "/div" + G;
+}
+
+async function startGame() {
+  const o = OPENINGS[currentId];
+  let story = applyVp(o.body, currentVp, currentNpcMode);
+  if (currentVp === "free") {
+    story += buildFreeEntryHook(o, currentNpcMode);
+  }
+  const playerInfo = document.getElementById("playerInfo").value.trim();
+  const combined = story + stageBlock(o) + statusBlock(o) + (playerInfo ? ("\n\n---\n" + playerInfo) : "");
+  try {
+    if (typeof getChatMessages === "function" && typeof setChatMessages === "function") {
+      const msgs = await getChatMessages(0);
+      if (msgs && msgs.length > 0) {
+        savedOriginalMsg = msgs[0].message;
+        await setChatMessages([{message_id:0, message:combined}]);
+        document.getElementById("btnStart").style.display = "none";
+        document.getElementById("btnBack").style.display = "";
+        document.getElementById("status").textContent = "已载入 0 楼 · " + o.code + " " + o.short_title;
+        return;
+      }
+    }
+  } catch(e) { console.error(e); }
+  try {
+    const doc = window.parent && window.parent.document;
+    const el = doc && (doc.querySelector("#send_textarea") || doc.querySelector("textarea#send_textarea"));
+    if (el) {
+      el.value = combined;
+      el.dispatchEvent(new Event("input", {bubbles:true}));
+      el.focus();
+      document.getElementById("status").textContent = "已填入输入框，请发送开局";
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function goBack() {
+  if (!savedOriginalMsg) return;
+  try {
+    await setChatMessages([{message_id:0, message:savedOriginalMsg}]);
+    document.getElementById("btnStart").style.display = "";
+    document.getElementById("btnBack").style.display = "none";
+    updateUI();
+  } catch(e) { console.error(e); }
+}
+
+(function(){
+  document.getElementById("playerInfo").value = PLAYER_INFO_MAP["free_keep"];
+  updateUI();
+})();
+</script>
+</body>
+</html>
+```
