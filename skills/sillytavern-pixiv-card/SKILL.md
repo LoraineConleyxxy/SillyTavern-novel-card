@@ -2,15 +2,15 @@
 name: sillytavern-pixiv-card
 description: Build or upgrade Pixiv novel SillyTavern V2/V3 character cards (v3.9+ card-specific architecture). Use when the user asks to create, refactor, or upgrade a Pixiv character card (角色卡/酒馆卡), extract 100% full-novel sub-openings (开局), build nested-regex per-act packs (正则套正则), add female companion co-submissive modes (摆法A·女伴同受调教/双姝共受), add multi-archetype male lead routes & custom male/female protagonist name+persona overrides (男主多路线下克上/共犯/自拟 & 女主换名换设定), stitch cross-book Easter-egg arcs with anti-crowding cast toggles (solo/full), preserve introduced or recruited companions across scene transitions (跨幕随行防丢人/切场景保留角色), purify NPC-erased modes, prevent CoT status-bar regex collisions, enhance co-tamable female supporting cast, or deploy cards to SillyTavern servers (archiving prior versions locally while keeping only the latest version on the server).
 metadata:
-  version: "3.9.0"
+  version: "3.9.1"
 ---
 
-# SillyTavern Pixiv Card Maker & Upgrader (v3.9 Card-Specific Architecture)
+# SillyTavern Pixiv Card Maker & Upgrader (v3.9.1 Card-Specific Architecture)
 
 > **Guiding Principle — 一张卡一个策略，Skill 只是辅助底盘**:
 > Every novel has its own narrative perspective (1st-person vs 3rd-person), world mechanics (cybernetic devices vs abyssal/temple magic constructs), visual aesthetic, and fetish appeal. **Never mechanically clone another card's UI color palette, base POV, or mode switches.** Audit each novel's specific strengths first, preserve its bespoke visual identity (e.g., Dark-Gold Obsidian `#110f0d/#c9a84c` for dark fantasy vs Cyan-Mint for sci-fi), and activate only the mode extensions that genuinely elevate that work.
 
-Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTavern V2/V3 character card (`v3.8` Architecture)** combining universal reliability invariants with tailored per-card gameplay strategies:
+Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTavern V2/V3 character card (`v3.9.1` Architecture)** combining universal reliability invariants with tailored per-card gameplay strategies:
 
 1. **Local Archive + Server Latest-Only Versioning Discipline (`本地保留历史版本，服务器只保留最新版`)**:
    - **Local Workspace (`历史版本/v<旧版本号>/`)**: Never overwrite prior local release files unless explicitly instructed — before building a new version, archive all prior card PNG/JSON, standalone worldbook JSON, node outlines, and `源码/` snapshots into `历史版本/v<旧版本号>/` locally, and output the newly bumped `<卡名>_v<新版本号>.png` & `<卡名>_世界书_v<新版本号>.json` in the card root.
@@ -58,7 +58,8 @@ Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTaver
 
 Reference benchmarks in `./角色卡/PIXIV量产卡/更新版v3/`:
 - **3rd-Person Epic Fantasy + 摆法 A Co-Sub Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/月见_深渊魔帝艾拉蒂雅/` (`v3.6`: 70 Nodes / 210 Sub-Openings across 6 Volumes, Dark-Gold Obsidian UI, **摆法 A `sandbox | cosub` 女伴同受调教**, 6-Volume Nested-Regex Packs, Yuri Construct Preservation, CJK Stage Codes)
-- **1st-Person Modern Sci-Fi + Cross-Book Easter-Egg + Companion Persistence Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/Syolily_我居然被机器人保姆调教了/` (`v3.8`: 24 Main Nodes + 5 Stitched Alien-Envoy Easter-Egg Nodes `X01~X05` = 99 Sub-Openings, `segs_first` Base + Sparse Patches, **`companions` 跨幕随行双保险防丢人 + 多场地合理同场借口**, `xcast: solo | full` 仅希蓉精简/全彩蛋双阵容防抢戏切换, 6-Act Nested Regex, Curated Co-Tamable Cast)
+- **1st-Person Modern Sci-Fi + Multi-Route Male + Custom Heroine + Easter-Egg Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/Syolily_我居然被机器人保姆调教了/` (`v3.9`: 24 Main Nodes + 5 Stitched Alien-Envoy Easter-Egg Nodes `X01~X05` = 99 Sub-Openings, `segs_first` Base + Sparse Patches, **男主 5 路线 (`supreme/reversal/protector/insider/custom_male`) + 女主自定义姓名人设 (`canon/custom`) + `companions` 跨幕随行双保险防丢人**, `xcast: solo | full` 仅希蓉精简/全彩蛋双阵容防抢戏切换, 6-Act Nested Regex)
+- **3rd-Person Multi-World Trials + Zero-TSF Pure Female Heroine + Full v3.9.1 Matrix**: `./角色卡/PIXIV量产卡/更新版v3/闲读_无限之淫神的诅咒/` (`v3.3`: 119 Nodes / 357 ~1000-char 3-Paragraph Sub-Openings across 6 Worlds, Amethyst-Abyss UI, `sandbox | cosub`, 5 Male Routes, `canon | custom` Heroine Override, 6-Pack Nested Regex)
 
 ---
 
@@ -132,11 +133,12 @@ Pixiv Novel Sources (audit ALL TXT chapters, POV, cast, fetish structure & aesth
 1. **Chained Nested-Regex Pipeline (`0 .. A+4`)**:
    - `0`: Entry `[[<NS>_OPENING_PANEL]]` → `[[<NS>_UI:<default_state>]][[<NS>_PACK:<first_arc_id>]]` (`markdownOnly: True`).
    - `1..A`: Per-act/per-volume pack injectors `/\[\[<NS>_PACK:<arc_id>\]\]/g` → `<nspack>{pack_json.replace("$", "$$")}</nspack>` (`markdownOnly: True`).
-   - `A+1`: UI shell merger `/\[\[<NS>_UI:([^\]]+)\]\][\s\S]*?<nspack>([\s\S]*?)<\/nspack>/g` (`markdownOnly: True`).
+   - `A+1`: UI shell merger `/\[\[<NS>_UI:([^\]]+)\]\][\s\S]*?<nspack>([\s\S]*?)<\/nspack>/g` (`markdownOnly: True` — **always use `([^\]]+)`, NEVER `([A-Za-z0-9_:]+)`**, because URL-encoded `protag_name` / `protag_bio` tokens contain `%`!).
      - **Critical `$` Escaping Order**: Inject `CATALOG` into `panel_template.html` first, escape **every** `$` → `$$` across the entire shell string, and **only then** replace `__UI_STATE_JSON__` → `"$1"` and `__PACK_JSON_SLOT__` → `$2`!
+     - **MANDATORY ```` ```html ... ``` ```` Iframe Codeblock Fence Invariant (`shell_replace_str` & `status_replace_str`)**: Both the UI shell regex (`A+1`) and the status bar regex (`A+3`) `replaceString`s **MUST wrap `<!DOCTYPE html>...</html>` inside a Markdown HTML codeblock fence**: ````"```html\n" + html_str.strip() + "\n```"```` (and `panel_template.html`, `status_template.html`, and `nodes_v3.json` must contain `0` internal ```` ``` ```` sequences). In SillyTavern + `JS-Slash-Runner / TavernHelper` ("渲染前端代码块"), regexes run *before* `showdown` + `DOMPurify`: omitting ```` ```html ... ``` ```` causes `DOMPurify` to treat the HTML as inline chat markup and strip `<script>` and `:root` CSS variables, rendering a blank shell!
    - `A+2`: Hidden trigger block hider (`markdownOnly: True`).
    - `A+3`: **CoT-Safe Status Bar Renderer (`markdownOnly: True, promptOnly: False`)**:
-     - Protect `<textarea id="rawStatus" style="display:none">$1</textarea>` with a temporary placeholder token, escape all other `$` → `$$` in `status_html`, then restore `$1`!
+     - Protect `<textarea id="rawStatus" style="display:none">$1</textarea>` with a temporary placeholder token, escape all other `$` → `$$` in `status_html`, restore `$1`, and wrap in ````"```html\n" + status_replace_str.strip() + "\n```"````!
      - Match both ASCII and CJK stage prefixes while forbidding any closing CoT tag inside the match:
        ```python
        cot_guard = r"(?![\s\S]*?<\/(?:think|thinking|thought|think_nya|report_nya)>)"
@@ -166,10 +168,11 @@ Pixiv Novel Sources (audit ALL TXT chapters, POV, cast, fetish structure & aesth
 
 1. **Automated Python + Node VM Verification (`verify_<card>.py`)**:
    - Assert `历史版本/` archives exist and PNG `chara` / `ccv3` chunks byte-match the JSON card.
+   - **Assert Mandatory ```` ```html ... ``` ```` Iframe Fences**: Assert that both the UI shell regex (`A+1`) and status bar regex (`A+3`) `replaceString`s start with ````"```html\n<!DOCTYPE html>"```` and end with ````"</html>\n```"```` (and strip those fences inside the Node VM runner right before `extractScript(...)` so VM DOM simulation tests the exact inner iframe document).
    - Simulate World Info activation across all `N` nodes × all mode/stance/xcast combinations, verifying **exact 1-of-3** (or exact `1-of-6` Easter-egg) `<ns_scene>` activation, **0** banned male tokens across all active entries in `erase`, **0** premature Easter-egg profile activation when `companions: 无` on main nodes, and **100%** Easter-egg profile keep-alive across all nodes when `companions` contains the introduced heroine.
    - Test genuine JS `RegExp` execution on `<think_nya>...[STATUS] draft...</think_nya><game>prose</game>[STATUS]...companions:...` across both ASCII and CJK stage codes.
    - Run all volume packs through the chained nested regexes inside Node `vm` across sub-openings + `status_template.html` (`调度 ▾`, auto-detection of companions from visible `ctx.chat` prose even when omitted in `rawStatus`, multi-venue `makeAdvancePrompt` bridges, and absence of literal `[<NS>_STATUS]` inside user advance prompts).
-2. **SillyTavern Server Deployment (Latest-Only Cleanup & `settings.json` Schema Rule)**:
+2. **SillyTavern Server Deployment (Server Latest-Only Cleanup & `settings.json` Schema Rule)**:
    - Upload the new `<CardName>.png` to `data/default-user/characters/` and `<WorldbookName>.json` to `data/default-user/worlds/`, verify both exist and are non-empty, create `chats/<CardName>`, and remove stale `thumbnails/avatar/<CardName>.png`.
-   - **Server Latest-Only Rule (`服务器只保留最新版`)**: Once the new version is verified on the SillyTavern server, remove any superseded older versions of the same work (`_v<old>.png`, `v1.x.png`, unversioned old PNGs, and old worldbook `.json` files) from `characters/`, `worlds/`, and `thumbnails/avatar/` (and remove empty old chat dirs if unused), while keeping local `历史版本/v<old>/` archives intact locally.
+   - **Server Latest-Only Rule (`服务器只保留最新版`)**: Once the new version is verified on the server, remove any superseded older versions of the same work (`_v<old>.png`, `v1.x.png`, unversioned old PNGs, and old worldbook `.json` files) from `characters/`, `worlds/`, and `thumbnails/avatar/` (and remove empty old chat dirs if unused), while keeping local `历史版本/v<old>/` archives intact on Mac.
    - **Schema Warning**: In SillyTavern's `settings.json`, `s["extension_settings"]["regex"]` is a **`list`** of global regex scripts (NOT a `dict`!). Never call `.setdefault()` on `extension_settings["regex"]`; always whitelist character regexes by appending both `"<CardName>.png"` and `"<CardName>"` to `s["extension_settings"].setdefault("character_allowed_regex", [])` while pruning deleted old-version entries from that list.
