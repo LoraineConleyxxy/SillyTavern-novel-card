@@ -1048,7 +1048,7 @@
         <div class="genre-Strip">
           <div id="tierTabs" style="display:inline-flex;flex-wrap:wrap;gap:4px;padding-right:8px;margin-right:4px;border-right:1px solid var(--line-strong);">
             <button type="button" class="g-chip active" data-tier="all">全部渠道</button>
-            <button type="button" class="g-chip" data-tier="v3">✦ v3.0 典藏</button>
+            <button type="button" class="g-chip" data-tier="v3">✦ v3 全本典藏</button>
             <button type="button" class="g-chip" data-tier="discord">新服 Discord</button>
             <button type="button" class="g-chip" data-tier="direct">旧服直下</button>
           </div>
@@ -1204,7 +1204,10 @@
       const numStr = pad2(c.index || (idx + 1));
 
       const pills = [];
-      if (c.opening_count) pills.push(`<span class="spec-pill strong">${c.opening_count} 幕节点</span>`);
+      if (c.opening_count) {
+        const subTxt = (c.sub_opening_count && c.sub_opening_count > c.opening_count) ? ` · ${c.sub_opening_count} 子段` : "";
+        pills.push(`<span class="spec-pill strong">${c.opening_count} 幕节点${subTxt}</span>`);
+      }
       if (c.worldbook_entries) pills.push(`<span class="spec-pill">世界书 ${c.worldbook_entries} 条</span>`);
       if (isV3) pills.push(`<span class="spec-pill">三视角切入</span>`);
       else if (isDirect && c.file_size_kb) pills.push(`<span class="spec-pill">单卡 ${fmtSize(c.file_size_kb)}</span>`);
@@ -1391,7 +1394,7 @@
           <div class="ms-metrics">
             <div class="mm-item">
               <div class="mm-k">收录节点规模</div>
-              <div class="mm-v">${card.opening_count || "-"} 幕开局</div>
+              <div class="mm-v">${(card.sub_opening_count && card.sub_opening_count > card.opening_count) ? `${card.opening_count} 幕 / ${card.sub_opening_count} 子段` : `${card.opening_count || "-"} 幕开局`}</div>
             </div>
             <div class="mm-item">
               <div class="mm-k">动态世界书</div>

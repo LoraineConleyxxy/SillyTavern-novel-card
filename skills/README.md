@@ -1,13 +1,13 @@
 # SillyTavern 长篇小说制卡 Agent Skills
 
-本目录存放用于自动化构建与升级 **SillyTavern V2/V3 长篇小说角色卡（v3.0 架构）** 的 Agent Skill 规范与配套前端模板。
+本目录存放用于自动化构建与升级 **SillyTavern V2/V3 长篇小说角色卡（v3.9 架构）** 的 Agent Skill 规范与配套前端模板。
 
 ## 包含技能
 
-- **[`sillytavern-pixiv-card/`](sillytavern-pixiv-card/)**：长篇 / Pixiv 小说酒馆角色卡 v3.0 制作与升级工作流
-  - [`SKILL.md`](sillytavern-pixiv-card/SKILL.md)：完整工作流指令（全本章节扫描、原著原文开局切片、正向里程碑阶段解耦世界书、4 条卡片级局部正则、JS 宏转义安全校验等）
-  - [`references/panel_template.html`](sillytavern-pixiv-card/references/panel_template.html)：0 楼交互式主从分幕开局选择面板参考模板（支持自由探索沙盒 / 男主视角 / 女主视角，以及保留可截胡 NPC / 清退反派切换）
-  - [`references/status_template.html`](sillytavern-pixiv-card/references/status_template.html)：顶栏状态条 + 可折叠「剧情控制」抽屉参考模板（实时统计本段回合数、三阶段事件进度指示、`chatMetadata` 持久化与下一节点自然衔接注入）
+- **[`sillytavern-pixiv-card/`](sillytavern-pixiv-card/)**：长篇 / Pixiv 小说酒馆角色卡 v3.9 制作与升级工作流
+  - [`SKILL.md`](sillytavern-pixiv-card/SKILL.md)：完整工作流指令（全本 100% 子开局切片、正则套正则按需分包、第三人称沙盒与双姝共受模式、男主多路线定制、女主换名换设定物理隔离、跨幕随行防丢人世界书、防 CoT 碰撞状态栏等）
+  - [`references/panel_template.html`](sillytavern-pixiv-card/references/panel_template.html)：0 楼可拖拽按需分包开局选择面板参考模板（支持自由探索 / 男主 5 路线定制 / 女主本尊与自定义换名覆写，以及保留男配 / 纯女角净版切换）
+  - [`references/status_template.html`](sillytavern-pixiv-card/references/status_template.html)：顶栏状态条 + 可折叠「调度」抽屉参考模板（支持跨幕随行同伴双源检测、多场地合理同场衔接、三阶段事件追踪、`chatMetadata` 持久化与任意子段跳转）
 
 ## 安装与使用方式
 

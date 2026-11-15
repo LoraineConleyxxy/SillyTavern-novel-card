@@ -1,858 +1,2531 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-:root {
-  --bg-root: #110f0d;
-  --bg-panel: #181512;
-  --bg-card: #201c17;
-  --bg-card-hover: #29231d;
-  --bg-elevated: #14110e;
-  --border: #3a3126;
-  --border-subtle: #2b241c;
-  --gold: #c9a84c;
-  --gold-light: #e6d39e;
-  --gold-dim: #8a7132;
-  --crimson: #9e3e32;
-  --crimson-light: #d87a6c;
-  --text-main: #ebe1d1;
-  --text-sub: #b5a792;
-  --text-muted: #7d7161;
-  --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', serif;
-  --sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-}
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: transparent;
-  color: var(--text-main);
-  font-family: var(--sans);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-.eil-shell {
-  width: 100%;
-  max-width: 780px;
-  margin: 0 auto;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: linear-gradient(165deg, #1a1612 0%, #14110e 60%, #191512 100%);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.48);
-  overflow: hidden;
-}
-.eil-topline {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold-light), var(--gold-dim), transparent);
-  opacity: 0.85;
-}
-.eil-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.08), transparent 70%);
-}
-.eil-brand {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.eil-brand-title {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--gold-light);
-  letter-spacing: 2px;
-}
-.eil-brand-sub {
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: 1.5px;
-  border: 1px solid var(--border);
-  padding: 1px 7px;
-  border-radius: 4px;
-  background: rgba(20, 17, 14, 0.6);
-}
-.eil-summary-pill {
-  font-size: 11.5px;
-  color: var(--gold-light);
-  background: rgba(201, 168, 76, 0.1);
-  border: 1px solid rgba(201, 168, 76, 0.35);
-  border-radius: 999px;
-  padding: 3px 11px;
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.eil-body {
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.sec-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 7px;
-}
-.sec-label {
-  font-size: 11.5px;
-  color: var(--gold);
-  letter-spacing: 1.5px;
-  font-weight: 600;
-}
-.sec-hint {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-/* Mode Selector Cards */
-.mode-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-.mode-card {
-  position: relative;
-  text-align: left;
-  padding: 10px 12px;
-  border-radius: 7px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-sub);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-.mode-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--gold-dim);
-}
-.mode-card.active {
-  border-color: var(--gold);
-  background: rgba(201, 168, 76, 0.11);
-  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.25);
-}
-.mode-card .m-tag {
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  color: var(--gold-dim);
-  display: block;
-  margin-bottom: 2px;
-}
-.mode-card.active .m-tag { color: var(--gold); }
-.mode-card .m-name {
-  font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-main);
-  display: block;
-  margin-bottom: 3px;
-}
-.mode-card.active .m-name { color: var(--gold-light); }
-.mode-card .m-desc {
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  display: block;
-}
-.mode-card.active .m-desc { color: var(--text-sub); }
-
-/* Sub-bar for Free Mode NPC Policy */
-.npc-bar {
-  margin-top: 8px;
-  padding: 9px 12px;
-  border-radius: 7px;
-  border: 1px dashed var(--border);
-  background: var(--bg-elevated);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.npc-bar-label {
-  font-size: 11.5px;
-  color: var(--text-sub);
-}
-.npc-bar-label b {
-  color: var(--gold-light);
-  font-weight: 600;
-}
-.npc-switch {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.npc-btn {
-  padding: 5px 11px;
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-sub);
-  font-size: 11.5px;
-  cursor: pointer;
-  transition: all 0.18s;
-  font-family: inherit;
-}
-.npc-btn:hover { border-color: var(--gold-dim); color: var(--text-main); }
-.npc-btn.active {
-  border-color: var(--gold);
-  background: rgba(201, 168, 76, 0.15);
-  color: var(--gold-light);
-  font-weight: 600;
-}
-
-/* Route Tabs */
-.route-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.route-tab {
-  padding: 5px 11px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-sub);
-  font-size: 11.5px;
-  cursor: pointer;
-  transition: all 0.18s;
-  font-family: inherit;
-}
-.route-tab:hover {
-  border-color: var(--gold-dim);
-  color: var(--text-main);
-}
-.route-tab.active {
-  border-color: var(--gold);
-  background: rgba(201, 168, 76, 0.14);
-  color: var(--gold-light);
-  font-weight: 600;
-}
-.route-tab .rt-cnt {
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-left: 4px;
-}
-.route-tab.active .rt-cnt { color: var(--gold); }
-
-/* Master-Detail Browser */
-.browser-grid {
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 12px;
-  height: 330px;
-}
-.node-list {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-elevated);
-  overflow-y: auto;
-  padding: 4px;
-}
-.node-list::-webkit-scrollbar, .detail-scroll::-webkit-scrollbar { width: 5px; }
-.node-list::-webkit-scrollbar-thumb, .detail-scroll::-webkit-scrollbar-thumb {
-  background: #3d3428;
-  border-radius: 3px;
-}
-.node-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 9px;
-  border-radius: 6px;
-  border-left: 2px solid transparent;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-  margin-bottom: 2px;
-}
-.node-item:hover { background: var(--bg-card-hover); }
-.node-item.active {
-  background: rgba(201, 168, 76, 0.13);
-  border-left-color: var(--gold);
-}
-.node-idx {
-  font-family: 'Times New Roman', serif;
-  font-size: 11px;
-  color: var(--text-muted);
-  min-width: 20px;
-}
-.node-code {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--gold-light);
-  background: rgba(201, 168, 76, 0.1);
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  border-radius: 4px;
-  padding: 0 5px;
-  min-width: 34px;
-  text-align: center;
-}
-.node-main {
-  flex: 1;
-  min-width: 0;
-}
-.node-title {
-  font-size: 12.5px;
-  color: var(--text-main);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.node-item.active .node-title {
-  color: var(--gold-light);
-  font-weight: 600;
-}
-.node-loc {
-  font-size: 10.5px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Detail Card */
-.detail-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-elevated);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.detail-head {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: rgba(201, 168, 76, 0.04);
-}
-.detail-title {
-  font-family: var(--serif);
-  font-size: 14.5px;
-  font-weight: 700;
-  color: var(--gold-light);
-  margin-bottom: 5px;
-}
-.detail-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-.d-chip {
-  font-size: 10.5px;
-  color: var(--text-sub);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1px 7px;
-}
-.d-chip b {
-  color: var(--gold);
-  font-weight: 600;
-  margin-right: 3px;
-}
-.detail-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-.d-block-title {
-  font-size: 10.5px;
-  color: var(--gold-dim);
-  letter-spacing: 1.5px;
-  margin-bottom: 3px;
-  font-weight: 600;
-}
-.d-events {
-  padding-left: 16px;
-  font-size: 11.5px;
-  color: var(--text-sub);
-  line-height: 1.6;
-}
-.d-events li { margin-bottom: 2px; }
-.d-excerpt {
-  font-family: var(--serif);
-  font-size: 12.5px;
-  color: var(--text-main);
-  line-height: 1.75;
-  background: rgba(17, 15, 13, 0.65);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: 8px 10px;
-  white-space: pre-wrap;
-}
-
-/* Custom Note Drawer */
-.note-details {
-  border: 1px solid var(--border-subtle);
-  border-radius: 7px;
-  background: var(--bg-elevated);
-  padding: 7px 12px;
-}
-.note-details summary {
-  cursor: pointer;
-  font-size: 11.5px;
-  color: var(--text-sub);
-  user-select: none;
-}
-.note-details summary:hover { color: var(--gold-light); }
-.note-textarea {
-  margin-top: 7px;
-  width: 100%;
-  height: 64px;
-  padding: 7px 9px;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--bg-root);
-  color: var(--text-main);
-  font-size: 12px;
-  font-family: inherit;
-  resize: vertical;
-  line-height: 1.5;
-}
-.note-textarea:focus {
-  outline: none;
-  border-color: var(--gold);
-}
-
-/* Footer Action Bar */
-.eil-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 18px;
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(17, 15, 13, 0.7);
-}
-.foot-info {
-  font-size: 11.5px;
-  color: var(--text-sub);
-  min-width: 0;
-  flex: 1;
-}
-.foot-info b { color: var(--gold-light); font-weight: 600; }
-.btn-launch {
-  padding: 9px 22px;
-  border-radius: 6px;
-  border: 1px solid var(--gold);
-  background: linear-gradient(135deg, #3b2d16 0%, #5c441e 100%);
-  color: var(--gold-light);
-  font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.btn-launch:hover {
-  background: linear-gradient(135deg, #4d3b1d 0%, #735526 100%);
-  box-shadow: 0 0 16px rgba(201, 168, 76, 0.28);
-}
-.btn-back {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-sub);
-  font-size: 12px;
-  cursor: pointer;
-}
-.btn-back:hover { border-color: var(--gold-dim); color: var(--text-main); }
-
-@media (max-width: 660px) {
-  .mode-grid { grid-template-columns: 1fr; }
-  .browser-grid {
-    grid-template-columns: 1fr;
-    height: auto;
+  :root {
+    --bg-deep: #091118;
+    --bg-panel: #0f1c28;
+    --bg-card: #132333;
+    --bg-elev: #172b3e;
+    --mint-main: #00e5c3;
+    --mint-dim: rgba(0, 229, 195, 0.13);
+    --sky-main: #38bdf8;
+    --sky-dim: rgba(56, 189, 248, 0.14);
+    --coral-warn: #fb7185;
+    --amber-acc: #fbbf24;
+    --txt-hi: #eaf6fb;
+    --txt-sec: #9dc0d4;
+    --txt-mut: #628398;
+    --line-soft: rgba(56, 189, 248, 0.18);
+    --line-strong: rgba(0, 229, 195, 0.42);
   }
-  .node-list { max-height: 210px; }
-  .detail-card { max-height: 280px; }
-  .eil-foot { flex-direction: column; align-items: stretch; }
-  .btn-launch { width: 100%; text-align: center; }
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--txt-hi);
+    line-height: 1.5;
+  }
+  .lulu-os {
+    background: radial-gradient(circle at 88% 8%, rgba(0, 229, 195, 0.1), transparent 40%),
+                linear-gradient(165deg, #091118 0%, #0d1924 55%, #0b1520 100%);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 16px;
+    box-shadow: 0 14px 36px rgba(3, 9, 15, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
+
+  /* 1. Compact Header */
+  .os-header {
+    padding: 11px 16px;
+    background: linear-gradient(90deg, #0b1824 0%, #112638 60%, #0e2230 100%);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .os-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .os-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.9px;
+    color: var(--mint-main);
+    background: rgba(0, 229, 195, 0.1);
+    border: 1px solid rgba(0, 229, 195, 0.32);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--mint-main);
+    box-shadow: 0 0 7px var(--mint-main);
+    display: inline-block;
+  }
+  .os-title {
+    font-size: 15.5px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+  }
+  .telemetry-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .t-chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.09);
+    border: 1px solid rgba(56, 189, 248, 0.24);
+    color: #bae6fd;
+  }
+  .t-chip.online {
+    background: rgba(0, 229, 195, 0.13);
+    border-color: rgba(0, 229, 195, 0.4);
+    color: #99f6e4;
+  }
+
+  /* 2. Clean Mode Strip & Sub-toolbar */
+  .mode-zone {
+    padding: 10px 16px;
+    background: rgba(15, 28, 40, 0.85);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .m-card {
+    text-align: left;
+    background: var(--bg-card);
+    border: 1.5px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 8px 11px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    font-family: inherit;
+    color: var(--txt-hi);
+  }
+  .m-card:hover {
+    border-color: var(--sky-main);
+    transform: translateY(-1px);
+  }
+  .m-card.active {
+    border-color: var(--mint-main);
+    background: linear-gradient(145deg, #13283a 0%, #102431 100%);
+    box-shadow: 0 4px 14px rgba(0, 229, 195, 0.15);
+  }
+  .m-head {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+  .m-card.active .m-head {
+    color: var(--mint-main);
+  }
+  .m-desc {
+    font-size: 11px;
+    color: var(--txt-sec);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sub-bar {
+    padding: 8px 10px;
+    background: rgba(9, 17, 24, 0.72);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    border-radius: 9px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-bar.stack {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sub-bar.hidden { display: none; }
+  .sub-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+  }
+  .sub-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--txt-mut);
+    margin-right: 2px;
+  }
+  .r-pill, .n-btn, .q-pill {
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line-soft);
+    background: var(--bg-card);
+    color: var(--txt-sec);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.14s ease;
+    white-space: nowrap;
+  }
+  .r-pill:hover, .n-btn:hover, .q-pill:hover {
+    border-color: var(--sky-main);
+    color: #ffffff;
+  }
+  .r-pill.active {
+    border-color: var(--mint-main);
+    background: rgba(0, 229, 195, 0.15);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px rgba(0, 229, 195, 0.22);
+  }
+  .n-btn.active {
+    background: var(--mint-main);
+    border-color: var(--mint-main);
+    color: #051816;
+    font-weight: 800;
+  }
+  .route-hint {
+    font-size: 11px;
+    color: #bde6f4;
+    background: rgba(0, 229, 195, 0.07);
+    border-left: 2.5px solid var(--mint-main);
+    padding: 4px 8px;
+    border-radius: 5px;
+  }
+  .custom-box {
+    background: rgba(6, 13, 20, 0.78);
+    border: 1px dashed rgba(0, 229, 195, 0.34);
+    border-radius: 8px;
+    padding: 7px 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .custom-box.hidden { display: none; }
+  .c-inputs {
+    display: grid;
+    grid-template-columns: 165px 1fr;
+    gap: 6px;
+  }
+  .c-in {
+    width: 100%;
+    padding: 5px 9px;
+    border-radius: 7px;
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    background: #071018;
+    color: var(--txt-hi);
+    font-size: 11.5px;
+    font-family: inherit;
+    outline: none;
+  }
+  .c-in:focus {
+    border-color: var(--mint-main);
+  }
+  .c-in::placeholder {
+    color: var(--txt-mut);
+  }
+  .q-pill {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-color: rgba(0, 229, 195, 0.28);
+    color: #99f6e4;
+  }
+  .q-pill.clear {
+    border-color: rgba(157, 192, 212, 0.25);
+    color: var(--txt-mut);
+  }
+
+  /* 3. Single-Row Stage Filter & Search */
+  .stage-bar {
+    padding: 8px 16px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .arc-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .a-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line-soft);
+    background: var(--bg-card);
+    color: var(--txt-sec);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.14s;
+  }
+  .a-pill:hover { border-color: var(--sky-main); color: #ffffff; }
+  .a-pill.active {
+    background: linear-gradient(135deg, var(--mint-main), var(--sky-main));
+    border-color: transparent;
+    color: #05161c;
+    font-weight: 800;
+  }
+  .a-pill.easter {
+    border-color: rgba(251, 191, 36, 0.45);
+    color: #fde68a;
+  }
+  .a-pill.easter.active {
+    background: linear-gradient(135deg, #fbbf24, var(--mint-main));
+    border-color: transparent;
+    color: #05161c;
+    font-weight: 800;
+  }
+  .stage-search {
+    width: 185px;
+    max-width: 100%;
+    padding: 4px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-deep);
+    font-size: 11.5px;
+    color: var(--txt-hi);
+    outline: none;
+  }
+  .stage-search::placeholder { color: var(--txt-mut); }
+
+  /* 4. Dual-Pane Console */
+  .os-bench {
+    display: grid;
+    grid-template-columns: 236px 1fr;
+    background: var(--bg-deep);
+    align-items: stretch;
+  }
+  .node-col {
+    position: relative;
+    border-right: 1px solid var(--line-soft);
+    background: rgba(12, 23, 34, 0.92);
+    min-height: 440px;
+  }
+  .node-list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.35) rgba(8, 16, 24, 0.5);
+  }
+  .node-list::-webkit-scrollbar { width: 6px; }
+  .node-list::-webkit-scrollbar-track { background: rgba(8, 16, 24, 0.5); }
+  .node-list::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.32);
+    border-radius: 999px;
+  }
+  .node-list::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 195, 0.6); }
+
+  .nl-item {
+    text-align: left;
+    background: var(--bg-card);
+    border: 1px solid rgba(56, 189, 248, 0.13);
+    border-radius: 9px;
+    padding: 7px 9px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--txt-hi);
+    transition: border-color 0.14s, background 0.14s;
+    flex-shrink: 0;
+  }
+  .nl-item:hover { border-color: var(--sky-main); }
+  .nl-item.active {
+    border-color: var(--mint-main);
+    border-left: 3.5px solid var(--mint-main);
+    background: var(--bg-elev);
+    box-shadow: 0 3px 10px rgba(0, 229, 195, 0.12);
+  }
+  .nl-r1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    gap: 4px;
+  }
+  .nl-code {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--mint-main);
+    background: var(--mint-dim);
+    padding: 0 5px;
+    border-radius: 4px;
+    font-family: ui-monospace, Menlo, monospace;
+  }
+  .nl-sec {
+    font-size: 10px;
+    color: var(--txt-mut);
+  }
+  .nl-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+  .nl-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--txt-mut);
+  }
+  .nl-loc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nl-tags {
+    display: inline-flex;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .c-dot {
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 4px;
+    color: #06131a;
+  }
+  .c-dot.lulu { background: #2dd4bf; }
+  .c-dot.yan { background: #38bdf8; }
+  .c-dot.zhang { background: #fb7185; color: #fff; }
+  .c-dot.xi { background: #c084fc; color: #fff; }
+  .c-dot.qi { background: #f472b6; color: #fff; }
+  .c-dot.cheng { background: #fde047; color: #111827; }
+  .c-dot.app { background: #fbbf24; }
+
+  /* Right Detail & Draggable Reader */
+  .detail-pane {
+    padding: 13px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--bg-panel);
+    min-width: 0;
+  }
+  .dp-top {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .dp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .dp-title {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .dp-nav {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .nav-btn {
+    padding: 3px 9px;
+    border-radius: 7px;
+    border: 1px solid var(--line-soft);
+    background: var(--bg-card);
+    color: var(--txt-sec);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .nav-btn:hover {
+    border-color: var(--mint-main);
+    color: var(--mint-main);
+  }
+  .dp-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .meta-chip {
+    font-size: 11px;
+    color: var(--txt-sec);
+    background: var(--bg-card);
+    border: 1px solid rgba(56, 189, 248, 0.16);
+    border-radius: 6px;
+    padding: 2px 8px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Adaptive K-Segment Selector */
+  .seq-box {
+    background: rgba(9, 17, 24, 0.72);
+    border: 1px solid rgba(0, 229, 195, 0.25);
+    border-radius: 10px;
+    padding: 8px 10px;
+    flex-shrink: 0;
+  }
+  .seq-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .seq-lbl {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--mint-main);
+  }
+  .full-pill {
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line-soft);
+    background: var(--bg-card);
+    color: var(--txt-sec);
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.14s;
+  }
+  .full-pill:hover {
+    border-color: var(--sky-main);
+    color: #ffffff;
+  }
+  .full-pill.active {
+    background: var(--sky-main);
+    border-color: var(--sky-main);
+    color: #04151c;
+    font-weight: 800;
+  }
+  .seq-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 6px;
+  }
+  .s-step {
+    text-align: left;
+    background: var(--bg-card);
+    border: 1.5px solid rgba(56, 189, 248, 0.16);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 11px;
+    color: var(--txt-sec);
+    line-height: 1.4;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.14s ease;
+    min-width: 0;
+  }
+  .s-step:hover {
+    border-color: var(--sky-main);
+    color: #ffffff;
+  }
+  .s-step.active {
+    border-color: var(--mint-main);
+    background: linear-gradient(155deg, rgba(0, 229, 195, 0.15) 0%, rgba(19, 39, 56, 0.95) 100%);
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 229, 195, 0.14);
+  }
+  .s-step.joined {
+    border-color: rgba(56, 189, 248, 0.42);
+    background: rgba(56, 189, 248, 0.09);
+    color: #e2f2fa;
+  }
+  .ss-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    gap: 4px;
+  }
+  .ss-num {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--sky-main);
+    font-family: ui-monospace, Menlo, monospace;
+  }
+  .s-step.active .ss-num { color: var(--mint-main); }
+  .ss-badge {
+    font-size: 9.5px;
+    padding: 0 5px;
+    border-radius: 4px;
+    background: var(--mint-main);
+    color: #041815;
+    font-weight: 800;
+  }
+  .ss-txt {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Draggable & Resizable Preview Reader */
+  .log-reader {
+    background: #081018;
+    border: 1px solid rgba(56, 189, 248, 0.24);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .lr-head {
+    padding: 6px 12px;
+    background: rgba(23, 43, 62, 0.72);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .lr-left, .lr-right {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .lr-pov-tag {
+    font-weight: 800;
+    color: var(--mint-main);
+  }
+  .lr-mode-pill {
+    font-size: 10.5px;
+    color: var(--txt-sec);
+    background: rgba(15, 28, 40, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+  .pref-toggle {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    background: rgba(19, 35, 51, 0.8);
+    color: var(--txt-sec);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .pref-toggle.active {
+    border-color: rgba(0, 229, 195, 0.5);
+    background: rgba(0, 229, 195, 0.14);
+    color: var(--mint-main);
+  }
+  .pref-toggle.hidden { display: none; }
+  .lr-len {
+    color: var(--txt-mut);
+    font-size: 10.5px;
+  }
+
+  .lr-scroll {
+    height: 300px;
+    min-height: 150px;
+    max-height: 720px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding: 11px 14px 14px;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 229, 195, 0.42) rgba(8, 16, 24, 0.7);
+  }
+  .lr-scroll.grabbing {
+    cursor: grabbing;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .lr-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .lr-scroll::-webkit-scrollbar-track {
+    background: rgba(12, 23, 34, 0.8);
+  }
+  .lr-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 229, 195, 0.36);
+    border-radius: 999px;
+    border: 2px solid rgba(12, 23, 34, 0.8);
+  }
+  .lr-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 229, 195, 0.68);
+  }
+
+  .lr-pref {
+    margin-bottom: 10px;
+    padding: 7px 10px;
+    background: rgba(0, 229, 195, 0.08);
+    border-left: 2.5px solid var(--mint-main);
+    border-radius: 6px;
+    font-size: 11.5px;
+    line-height: 1.56;
+    color: #bde6f4;
+  }
+  .lr-pref.hidden { display: none; }
+  .lr-pref-k {
+    font-weight: 800;
+    color: var(--mint-main);
+    margin-right: 5px;
+  }
+  .lr-body {
+    font-size: 13px;
+    line-height: 1.76;
+    color: #e2f1f8;
+    white-space: pre-wrap;
+  }
+
+  .lr-resizer {
+    height: 19px;
+    background: rgba(15, 28, 40, 0.9);
+    border-top: 1px solid rgba(56, 189, 248, 0.16);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    cursor: ns-resize;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    color: var(--txt-mut);
+    font-size: 10px;
+    transition: background 0.14s, color 0.14s;
+  }
+  .lr-resizer:hover, .lr-resizer.dragging {
+    background: rgba(0, 229, 195, 0.13);
+    color: var(--mint-main);
+  }
+  .lr-grip {
+    width: 32px;
+    height: 3.5px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.65;
+  }
+
+  /* 5. Compact Bottom Dock */
+  .os-dock {
+    padding: 9px 16px;
+    background: #0a151f;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .note-drawer summary {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--txt-sec);
+    cursor: pointer;
+    user-select: none;
+  }
+  .note-drawer summary:hover { color: var(--sky-main); }
+  .note-in {
+    margin-top: 6px;
+    width: 100%;
+    min-height: 50px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-deep);
+    color: var(--txt-hi);
+    font-size: 12px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  .dock-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .dock-msg {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--txt-sec);
+  }
+  .go-btn {
+    background: linear-gradient(135deg, #00e5c3 0%, #14b8a6 50%, #0284c7 100%);
+    color: #041517;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 5px 16px rgba(0, 229, 195, 0.25);
+    transition: transform 0.14s, filter 0.14s;
+    font-family: inherit;
+  }
+  .go-btn:hover {
+    filter: brightness(1.07);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 720px) {
+    .mode-grid { grid-template-columns: 1fr; }
+    .c-inputs { grid-template-columns: 1fr; }
+    .os-bench { grid-template-columns: 1fr; }
+    .node-col {
+      min-height: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .node-list {
+      position: static;
+      max-height: 195px;
+    }
+    .seq-steps { grid-template-columns: 1fr; }
+    .lr-scroll { height: 250px; }
+    .stage-search { width: 100%; }
+  }
 </style>
 </head>
 <body>
-<div class="eil-shell">
-  <div class="eil-topline"></div>
-  <div class="eil-head">
-    <div class="eil-brand">
-      <span class="eil-brand-title">深渊魔帝艾拉蒂雅</span>
-      <span class="eil-brand-sub">VER 3.0 · 全六卷 70 节点完整版</span>
+<div class="lulu-os">
+  <div class="os-header">
+    <div class="os-brand">
+      <span class="os-kicker"><span class="pulse-dot"></span> LULU OS v3.9</span>
+      <span class="os-title">我居然被机器人保姆调教了</span>
     </div>
-    <div class="eil-summary-pill" id="status">自由探索(可截胡) · 01 【R1】便器总督的就职仪式</div>
+    <div class="telemetry-badges">
+      <span class="t-chip online">24 主线 + 5 彩蛋 · 99 段</span>
+      <span class="t-chip">伊芸/自定女主</span>
+      <span class="t-chip">露露</span>
+      <span class="t-chip">燕芝</span>
+      <span class="t-chip">张雁</span>
+      <span class="t-chip" style="border-color:rgba(251,191,36,0.45);color:#fde68a;">✦ 希蓉</span>
+    </div>
   </div>
 
-  <div class="eil-body">
-    <div>
-      <div class="sec-head">
-        <span class="sec-label">壹 · 叙事视角与沙盒规则</span>
-        <span class="sec-hint">自由探索模式下无需预设身份，首轮回复直接书写登场即可</span>
-      </div>
-      <div class="mode-grid">
-        <button type="button" class="mode-card active" onclick="setViewpoint('free')" id="btn-free">
-          <span class="m-tag">SANDBOX MODE</span>
-          <span class="m-name">自由探索 · 沙盒介入</span>
-          <span class="m-desc">以独立变数入场，可自由探索、截胡宝珠、救赎或支配众女角，随时改写原著走向</span>
-        </button>
-        <button type="button" class="mode-card" onclick="setViewpoint('male')" id="btn-male">
-          <span class="m-tag">CONQUEROR POV</span>
-          <span class="m-name">男主视角 · 宿命征服</span>
-          <span class="m-desc">直接取代原著主导者，执掌爱欲魔神宝珠，亲手将高傲魔帝一步步拉下神坛</span>
-        </button>
-        <button type="button" class="mode-card" onclick="setViewpoint('female')" id="btn-female">
-          <span class="m-tag">EMPRESS POV</span>
-          <span class="m-name">女主视角 · 深渊魔帝</span>
-          <span class="m-desc">代入魔帝艾拉蒂雅本人（自称「余」），亲历至高尊严与身体异变间的拉扯</span>
-        </button>
-      </div>
+  <div class="mode-zone">
+    <div class="mode-grid">
+      <button type="button" class="m-card active" data-mode="free">
+        <div class="m-head">✦ 第三人称 · 都市沙盒</div>
+        <div class="m-desc">日常路人切入 · 自由博弈</div>
+      </button>
+      <button type="button" class="m-card" data-mode="male">
+        <div class="m-head">👑 男主视角 · 多线定制</div>
+        <div class="m-desc">主宰 / 下克上 / 共犯 / 同居 / 自拟</div>
+      </button>
+      <button type="button" class="m-card" data-mode="female">
+        <div class="m-head">🎓 女主视角 · 本尊/换人设</div>
+        <div class="m-desc">代入伊芸或自定义姓名与外貌设定</div>
+      </button>
+    </div>
 
-      <div class="npc-bar" id="npcModeBox">
-        <span class="npc-bar-label"><b>原著反派设定</b>（弗弗拉奇 / 加扎克 / 图兹等）：</span>
-        <div class="npc-switch">
-          <button type="button" class="npc-btn active" onclick="setNpcMode('keep')" id="btn-npc-keep">保留为普通 NPC（可截胡夺宝 / 可击杀）</button>
-          <button type="button" class="npc-btn" onclick="setNpcMode('erase')" id="btn-npc-erase">清退原著反派（独享舞台与主导权）</button>
+    <div id="freeBar" class="sub-bar">
+      <div class="sub-group">
+        <span class="sub-lbl">身份</span>
+        <div id="roleGrid" class="sub-group"></div>
+      </div>
+      <div class="sub-group">
+        <span class="sub-lbl">男配</span>
+        <button type="button" class="n-btn active" data-npc="keep" title="保留李德/昊鹏/高城为无光环可截胡NPC">保留</button>
+        <button type="button" class="n-btn" data-npc="erase" title="清退原著男性配角，切换全女角纯净版正文">清退</button>
+      </div>
+    </div>
+
+    <div id="maleBar" class="sub-bar stack hidden">
+      <div class="sub-row">
+        <div class="sub-group">
+          <span class="sub-lbl">男主路线</span>
+          <div id="maleRoleGrid" class="sub-group"></div>
+        </div>
+      </div>
+      <div id="maleRoleHint" class="route-hint"></div>
+      <div class="custom-box">
+        <div class="sub-row">
+          <span class="sub-lbl" style="color:var(--mint-main);">✦ 男主姓名与人设定制（选填 · 完全自拟路线下作为唯一准绳）</span>
+          <div class="sub-group">
+            <button type="button" class="q-pill male-preset-pill" data-mname="林默" data-mbio="23岁华苹智能穿戴实验室年轻核心工程师，外形清隽斯文，深谙露露脑波耳钉与子母副机的每一道底层参数">💻 天才研发师</button>
+            <button type="button" class="q-pill male-preset-pill" data-mname="顾言" data-mbio="21岁北清统计经济系高材生，高挑俊朗、表面温和守礼，实则擅长抓住伊教授口是心非的弱点步步紧逼">🎓 腹黑高材生</button>
+            <button type="button" class="q-pill male-preset-pill" data-mname="沈澈" data-mbio="25岁海归青年才俊，受伊父托付同城照应的世交挂名未婚夫，举止优雅从容，深谙她的冷艳外壳与私下反差">🕴 世交未婚夫</button>
+            <button type="button" id="clearMaleCustomBtn" class="q-pill clear">清空</button>
+          </div>
+        </div>
+        <div class="c-inputs">
+          <input id="maleNameIn" type="text" class="c-in" placeholder="男主姓名（如：林默，留空默认「你」）" />
+          <input id="maleBioIn" type="text" class="c-in" placeholder="自定义男主身份、外貌、性格或与伊芸的关系（告别固定西装霸总模板）…" />
         </div>
       </div>
     </div>
 
-    <div>
-      <div class="sec-head">
-        <span class="sec-label">贰 · 篇章卷宗筛选</span>
-        <span class="sec-hint" id="listLabel">当前显示：remake序幕 (R1-R11)</span>
+    <div id="femBar" class="sub-bar stack hidden">
+      <div class="sub-row">
+        <div class="sub-group">
+          <span class="sub-lbl">叙事人称</span>
+          <button type="button" class="n-btn fem-pov-btn active" data-fempov="second">第二人称「你」</button>
+          <button type="button" class="n-btn fem-pov-btn" data-fempov="first">第一人称「我」</button>
+        </div>
+        <div class="sub-group">
+          <span class="sub-lbl">女主身份</span>
+          <button type="button" class="n-btn fem-mode-btn active" data-femmode="canon" title="代入原著24岁双博士教授伊芸">🌸 原著伊芸</button>
+          <button type="button" class="n-btn fem-mode-btn" data-femmode="custom" title="自定义女主姓名、发色身材与背景人设，实时替换正文称呼并屏蔽原著伊芸档案">✨ 自定义女主</button>
+        </div>
+        <div class="sub-group">
+          <span class="sub-lbl">舞台阵容</span>
+          <button type="button" class="n-btn active" data-npc="keep" title="保留原著阵容">原著阵容</button>
+          <button type="button" class="n-btn" data-npc="erase" title="清退原著男性配角，由露露/燕芝/张雁承接全女角互动">纯女角净版</button>
+        </div>
       </div>
-      <div class="route-tabs" id="chapterTabs"></div>
+      <div id="femCustomBox" class="custom-box hidden">
+        <div class="sub-row">
+          <span class="sub-lbl" style="color:var(--mint-main);">✨ 自定义女主姓名与人设覆写（实时替换0楼正文/对话称呼，物理隔离原著伊芸档案）</span>
+          <div class="sub-group">
+            <button type="button" class="q-pill fem-preset-pill" data-fname="苏清璃" data-fbio="25岁海归金融学美女教授兼首席顾问，身高170cm，乌黑长卷发配眼尾泪痣，丰乳细腰配修长黑丝美腿，表面强势高冷实则极度敏感">🖤 清冷黑丝御姐</button>
+            <button type="button" class="q-pill fem-preset-pill" data-fname="白星澜" data-fbio="22岁银发紫瞳的财团年轻董事兼特聘讲师，身高166cm，肌肤胜雪、身段娇美丰盈，性格傲娇嘴硬却极易害羞破防">🤍 银发傲娇千金</button>
+            <button type="button" class="q-pill fem-preset-pill" data-fname="林婉音" data-fbio="24岁气质温婉柔美的青年女学者，身高165cm，栗色长发配丰腴曼妙的沙漏曲线，外柔内刚却难以抗拒强制安排">💗 温婉丰满学者</button>
+            <button type="button" id="clearFemCustomBtn" class="q-pill clear">清空</button>
+          </div>
+        </div>
+        <div class="c-inputs">
+          <input id="femNameIn" type="text" class="c-in" placeholder="女主姓名（如：苏清璃 / 慕容雪）" />
+          <input id="femBioIn" type="text" class="c-in" placeholder="自定义发色、身材、年龄、性格或身份设定（将完全取代原著伊芸设定）…" />
+        </div>
+      </div>
     </div>
 
-    <div class="browser-grid">
-      <div class="node-list" id="entryList"></div>
-      <div class="detail-card" id="previewBox"></div>
+    <div id="xcastBar" class="sub-bar" style="margin-top:2px;border-color:rgba(251,191,36,0.28);">
+      <div class="sub-group">
+        <span class="sub-lbl" style="color:#fde68a;">✦ 星使彩蛋阵容</span>
+        <button type="button" class="n-btn xcast-btn active" data-xcast="solo" title="彩蛋仅保留阿斯兰蒂公使希蓉一人登场，聚焦女主×希蓉×露露，避免人物过多分散AI笔力">仅希蓉（精简推荐）</button>
+        <button type="button" class="n-btn xcast-btn" data-xcast="full" title="额外解锁当红旗袍女歌星琪琪、明艳学姐程欣然与清冷班长程孜然同台互动">全彩蛋（+琪琪·程氏姐妹）</button>
+      </div>
     </div>
-
-    <details class="note-details">
-      <summary>叁 · 开局附注与自定义说明（可选，点击展开修改）</summary>
-      <textarea class="note-textarea" id="playerInfo"></textarea>
-    </details>
   </div>
 
-  <div class="eil-foot">
-    <div class="foot-info" id="footInfo">已选节点：<b>R1 · 便器总督的就职仪式</b></div>
-    <button type="button" class="btn-launch" onclick="startGame()" id="btnStart">踏入此节点 · 开启旅程</button>
-    <button type="button" class="btn-back" onclick="goBack()" id="btnBack" style="display:none;">← 返回重新选择开局</button>
+  <div class="stage-bar">
+    <div id="arcPills" class="arc-pills"></div>
+    <input id="searchIn" type="text" class="stage-search" placeholder="搜索编号 / 场景 / 人物…" />
+  </div>
+
+  <div class="os-bench">
+    <div class="node-col">
+      <div id="nodeList" class="node-list"></div>
+    </div>
+
+    <div class="detail-pane">
+      <div class="dp-top">
+        <div class="dp-head">
+          <div id="dpTitle" class="dp-title"></div>
+          <div class="dp-nav">
+            <button id="prevBtn" type="button" class="nav-btn">◀ 上一节</button>
+            <button id="nextBtn" type="button" class="nav-btn">下一节 ▶</button>
+          </div>
+        </div>
+        <div class="dp-chips">
+          <span id="dpLoc" class="meta-chip"></span>
+          <span id="dpEquip" class="meta-chip"></span>
+          <span id="dpCast" class="meta-chip"></span>
+        </div>
+      </div>
+
+      <div class="seq-box">
+        <div class="seq-head">
+          <span class="seq-lbl">切入段落</span>
+          <button id="fullNodeBtn" type="button" class="full-pill">全节连读</button>
+        </div>
+        <div id="seqSteps" class="seq-steps"></div>
+      </div>
+
+      <div class="log-reader">
+        <div class="lr-head">
+          <div class="lr-left">
+            <span id="lrTitle" class="lr-pov-tag">📖 N01.1</span>
+            <span id="lrPov" class="lr-mode-pill"></span>
+          </div>
+          <div class="lr-right">
+            <button id="prefToggleBtn" type="button" class="pref-toggle active" title="是否在预览与开局消息顶部附带前情提要">✓ 前情</button>
+            <span id="lrLen" class="lr-len"></span>
+          </div>
+        </div>
+        <div id="lrScroll" class="lr-scroll">
+          <div id="lrPref" class="lr-pref"></div>
+          <div id="lrBody" class="lr-body"></div>
+        </div>
+        <div id="lrResizer" class="lr-resizer" title="按住上下拖动可调节预览框高度">
+          <span class="lr-grip"></span>
+          <span>↕ 拖动调节高度</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="os-dock">
+    <details class="note-drawer">
+      <summary>＋ 自定义补充备注（可选）</summary>
+      <textarea id="customNote" class="note-in" placeholder="可补充额外开局情境、关系细节或互动偏好……"></textarea>
+    </details>
+    <div class="dock-row">
+      <div id="dockMsg" class="dock-msg">N01.1</div>
+      <button id="goBtn" type="button" class="go-btn">进入 N01.1 开局 ▶</button>
+    </div>
   </div>
 </div>
 
 <script>
-const OPENINGS = __OPENINGS_JSON__;
-const CHAPTERS = __CHAPTERS_JSON__;
-const STAGE_TITLES = __STAGE_TITLES_JSON__;
-const NEXT_STAGE = __NEXT_STAGE_JSON__;
-const PLAYER_INFO_MAP = __PLAYER_INFO_JSON__;
+(function() {
+  const UI_STATE = __UI_STATE_JSON__;
+  const CATALOG = __CATALOG_JSON__;
+  const PACK_NODES = __PACK_JSON_SLOT__;
+  const OB = String.fromCharCode(91);
+  const CB = String.fromCharCode(93);
 
-let currentVp = "free";
-let currentNpcMode = "keep";
-let currentTab = 0;
-let currentId = 0;
-let savedOriginalMsg = null;
+  const PACK_BY_ID = {};
+  (PACK_NODES || []).forEach(function(item) {
+    PACK_BY_ID[item.id] = item;
+  });
 
-const U = String.fromCharCode(60) + "user" + String.fromCharCode(62);
-const VP_NAMES = {
-  "male": ["弗弗拉奇", "卡尔珀", "卡塔乌雷", "阿西尔", "扎基厄斯", "阿古曼", "加扎克", "图兹"],
-  "female": ["艾拉蒂雅"]
-};
-const ERASE_MAP = {
-  "弗弗拉奇": "某名早已被肃清的盗匪残党",
-  "卡尔珀": "黑水城叛党",
-  "卡塔乌雷": "商队粗鄙护卫",
-  "阿西尔": "路过佣兵",
-  "扎基厄斯": "捕奴队杂兵",
-  "阿古曼": "审讯室魔物",
-  "加扎克": "地下监狱看守头目",
-  "图兹": "白兔庄园旧主"
-};
-const VP_MAP = {male:{}, female:{}, free:{}};
-for (const k of VP_NAMES.male) VP_MAP.male[k] = U;
-for (const k of VP_NAMES.female) VP_MAP.female[k] = U;
+  const FREE_ROLE_IDS = ["phd", "undergrad", "clerk", "staff", "tenant", "custom"];
+  const MALE_ROLE_IDS = ["supreme", "reversal", "protector", "insider", "custom_male"];
 
-function applyVp(text, vp, npcMode) {
-  let r = text;
-  if (vp === "free" && npcMode === "erase") {
-    for (const k of Object.keys(ERASE_MAP).sort((a,b)=>b.length-a.length)) {
-      r = r.split(k).join(ERASE_MAP[k]);
+  let curArc = "all";
+  let curPackArc = "act1_ai_takeover";
+  let selectedId = 0;
+  let curStep = 1;
+  let curMode = "free";
+  let curNpc = "keep";
+  let curFreeRole = "phd";
+  let curMaleRole = "supreme";
+  let curFemPov = "second";
+  let curFemMode = "canon";
+  let showPref = true;
+  let curXcast = "solo";
+  let curSearch = "";
+  let maleName = "";
+  let maleBio = "";
+  let femName = "";
+  let femBio = "";
+
+  if (typeof UI_STATE === "string" && UI_STATE.indexOf(":") >= 0) {
+    const sp = UI_STATE.split(":");
+    if (sp.length >= 9) {
+      curArc = sp[0] || "all";
+      curPackArc = sp[1] || "act1_ai_takeover";
+      selectedId = Math.max(0, Math.min(CATALOG.length - 1, Number(sp[2]) || 0));
+      curStep = Math.max(0, Number(sp[3]) || 0);
+      curMode = sp[4] || "free";
+      curNpc = (sp[5] === "erase") ? "erase" : "keep";
+      const rTok = sp[6] || "phd";
+      if (MALE_ROLE_IDS.indexOf(rTok) >= 0) curMaleRole = rTok;
+      else if (FREE_ROLE_IDS.indexOf(rTok) >= 0) curFreeRole = rTok;
+      curFemPov = sp[7] || "second";
+      showPref = sp[8] !== "0";
+      if (sp.length >= 10 && sp[9]) curXcast = sp[9];
+      if (sp.length >= 11 && sp[10]) curFemMode = sp[10] === "custom" ? "custom" : "canon";
     }
-    return r;
   }
-  const m = VP_MAP[vp] || {};
-  for (const k of Object.keys(m).sort((a,b)=>b.length-a.length))
-    r = r.split(k).join(m[k]);
-  return r;
-}
 
-function buildFreeEntryHook(o, npcMode) {
-  const N = String.fromCharCode(10);
-  if (npcMode === "erase") {
-    return N + N + "---" + N +
-      "【自由探索·独享舞台切入（当前地点：" + o.location + "）】" + N +
-      "此时此刻，「" + o.code + "·" + o.short_title + "」的局势正停留在这一幕。场中并无任何其他雄性主宰者能够左右深渊魔帝艾拉蒂雅与众女角的命运，一切原有的危机与因果都悬而未决。" + N +
-      "而真正的唯一变数——" + U + "，已经来到了现场。" + N +
-      "（请在下一轮回复中直接写出你的身份、能力与出场行动：无论是亲手接管场中局势、以支配者或救赎者姿态介入，还是带她自由探索这片天地，世界都将随你的行动实时演进。）";
+  function cleanSingleLine(s) {
+    return String(s || "").replace(/[\r\n]+/g, "；").trim();
   }
-  return N + N + "---" + N +
-    "【自由探索·沙盒舞台切入（当前地点：" + o.location + "）】" + N +
-    "此时此刻，「" + o.code + "·" + o.short_title + "」的局势正停留在这一幕。" + N +
-    "而独立于原著因果之外的真正变数——" + U + "，已经来到了现场。" + N +
-    "（请在下一轮回复中直接写出你的身份、立场与出场方式：无论是强势出手截胡夺取宝珠、击败或驱逐原著反派、救下女角，还是暗中布局改写剧情走向，在场所有角色都将对你的介入做出即时反应。）";
-}
 
-function escH(s) {
-  var A = String.fromCharCode(38);
-  return String(s == null ? "" : s).split(A).join(A+"amp;").split("<").join(A+"lt;").split(">").join(A+"gt;").split('"').join(A+"quot;");
-}
-
-function filteredIds() {
-  const ch = CHAPTERS[currentTab] || CHAPTERS[0];
-  const res = [];
-  for (let i = ch.min; i <= ch.max; i++) {
-    if (OPENINGS[i]) res.push(i);
-  }
-  return res;
-}
-
-function renderChapterTabs() {
-  let h = "";
-  for (let i = 0; i < CHAPTERS.length; i++) {
-    const ch = CHAPTERS[i];
-    const act = i === currentTab;
-    const cnt = ch.max - ch.min + 1;
-    h += '<button type="button" class="route-tab'+(act?' active':'')+'" onclick="selectTab('+i+')">'+escH(ch.name)+'<span class="rt-cnt">'+cnt+'</span></button>';
-  }
-  document.getElementById("chapterTabs").innerHTML = h;
-}
-
-function renderList() {
-  renderChapterTabs();
-  const ids = filteredIds();
-  const ch = CHAPTERS[currentTab] || CHAPTERS[0];
-  document.getElementById("listLabel").textContent = "当前卷宗：" + ch.name + "（共 " + ids.length + " 节）";
-  let h = "";
-  for (const id of ids) {
-    const o = OPENINGS[id];
-    const act = id === currentId;
-    const cleanTitle = o.title.replace(/^【[^】]+】/, "");
-    h += '<div class="node-item'+(act?' active':'')+'" onclick="selOp('+id+')">';
-    h += '<span class="node-idx">'+String(id+1).padStart(2,"0")+'</span>';
-    h += '<span class="node-code">'+escH(o.code)+'</span>';
-    h += '<div class="node-main">';
-    h += '<div class="node-title">'+escH(cleanTitle)+'</div>';
-    h += '<div class="node-loc">'+escH(o.location)+'</div>';
-    h += '</div></div>';
-  }
-  document.getElementById("entryList").innerHTML = h;
-  renderPreview();
-}
-
-function renderPreview() {
-  const o = OPENINGS[currentId];
-  if (!o) return;
-  const cleanTitle = o.title.replace(/^【[^】]+】/, "");
-  const evs = Array.isArray(o.events) ? o.events : [];
-  const evHtml = evs.map(e => '<li>' + escH(e) + '</li>').join('');
-  const excerpt = o.body.length > 360 ? o.body.slice(0, 360) + "……" : o.body;
-
-  let h = '<div class="detail-head">';
-  h += '<div class="detail-title">【' + escH(o.code) + '】' + escH(cleanTitle) + '</div>';
-  h += '<div class="detail-chips">';
-  h += '<span class="d-chip"><b>地点</b>' + escH(o.location) + '</span>';
-  h += '<span class="d-chip"><b>状态</b>' + escH(o.stage) + '</span>';
-  h += '<span class="d-chip"><b>着装</b>' + escH(o.equip) + '</span>';
-  h += '</div></div>';
-  h += '<div class="detail-scroll">';
-  if (evHtml) {
-    h += '<div><div class="d-block-title">本节事件脉络（1 → 2 → 3）</div><ol class="d-events">' + evHtml + '</ol></div>';
-  }
-  h += '<div><div class="d-block-title">开场正文预览</div><div class="d-excerpt">' + escH(excerpt) + '</div></div>';
-  h += '</div>';
-  document.getElementById("previewBox").innerHTML = h;
-  const fi = document.getElementById("footInfo");
-  if (fi) fi.innerHTML = '已选节点：<b>' + escH(o.code + ' · ' + o.short_title) + '</b>（' + escH(o.location) + '）';
-}
-
-function selectTab(tabIdx) {
-  currentTab = tabIdx;
-  const ch = CHAPTERS[tabIdx];
-  if (currentId < ch.min || currentId > ch.max) {
-    currentId = ch.min;
-  }
-  updateUI();
-}
-
-function selOp(id) {
-  currentId = id;
-  updateUI();
-}
-
-function isPresetInfo(v) {
-  v = (v || "").trim();
-  return v === "" || Object.values(PLAYER_INFO_MAP).some(p => p.trim() === v);
-}
-
-function currentInfoKey() {
-  if (currentVp === "free") return currentNpcMode === "erase" ? "free_erase" : "free_keep";
-  return currentVp;
-}
-
-function setViewpoint(vp) {
-  currentVp = vp;
-  ["free", "male", "female"].forEach(k => {
-    const b = document.getElementById("btn-" + k);
-    if (b) b.classList.toggle("active", k === vp);
-  });
-  const npcBox = document.getElementById("npcModeBox");
-  if (npcBox) npcBox.style.display = (vp === "free") ? "flex" : "none";
-  const ta = document.getElementById("playerInfo");
-  if (ta && isPresetInfo(ta.value)) ta.value = PLAYER_INFO_MAP[currentInfoKey()];
-  updateUI();
-}
-
-function setNpcMode(mode) {
-  currentNpcMode = mode;
-  ["keep", "erase"].forEach(k => {
-    const b = document.getElementById("btn-npc-" + k);
-    if (b) b.classList.toggle("active", k === mode);
-  });
-  const ta = document.getElementById("playerInfo");
-  if (ta && isPresetInfo(ta.value)) ta.value = PLAYER_INFO_MAP[currentInfoKey()];
-  updateUI();
-}
-
-function effectiveNpcMode() {
-  if (currentVp === "male") return "replaced";
-  if (currentVp === "female") return "keep";
-  return currentNpcMode;
-}
-
-function updateUI() {
-  let vl = "";
-  if (currentVp === "free") {
-    vl = currentNpcMode === "erase" ? "自由探索(清退反派)" : "自由探索(可截胡NPC)";
-  } else if (currentVp === "male") {
-    vl = "男主视角";
-  } else {
-    vl = "女主视角";
-  }
-  const o = OPENINGS[currentId];
-  document.getElementById("status").textContent = vl + " · " + String(currentId+1).padStart(2,"0") + " 【" + o.code + "】" + o.short_title;
-  renderList();
-}
-
-function stageTitle(code) { return STAGE_TITLES[code] || code || ""; }
-function statusTag(close) {
-  const L = String.fromCharCode(91);
-  const R = String.fromCharCode(93);
-  return L + (close ? "/" : "") + "EILATIA_" + "STATUS" + R;
-}
-
-function statusBlock(o) {
-  const code = o.code;
-  const next = NEXT_STAGE[code] || "";
-  const adv = next ? code + "_TO_" + next : "";
-  const npcM = effectiveNpcMode();
-  const N = String.fromCharCode(10);
-  const lines = [
-    "", "",
-    statusTag(false),
-    "stage: " + code,
-    "stage_title: " + stageTitle(code),
-    "stage_key: [[" + "EILATIA_" + "STAGE:" + code + "]]",
-    "opening_key: [[" + "EILATIA_" + "OPENING:" + code + "]]",
-    "view: " + currentVp,
-    "npc_mode: " + npcM,
-    "next_stage: " + next,
-    "next_title: " + stageTitle(next),
-    "advance_id: " + adv,
-    "can_advance: " + (next ? "true" : "false"),
-    statusTag(true)
+  const COMPOUND_SURNAMES = [
+    "欧阳", "太史", "端木", "上官", "司马", "东方", "独孤", "南宫", "万俟", "闻人",
+    "夏侯", "诸葛", "尉迟", "公羊", "赫连", "澹台", "皇甫", "宗政", "濮阳", "公冶",
+    "公孙", "慕容", "仲孙", "钟离", "长孙", "宇文", "司徒", "鲜于", "司空", "闾丘",
+    "轩辕", "令狐", "百里", "呼延", "东郭", "西门", "南宫", "第五", "拓跋"
   ];
-  return lines.join(N);
-}
 
-function stageBlock(o) {
-  const code = o.code;
-  const npcM = effectiveNpcMode();
-  const L = String.fromCharCode(60);
-  const G = String.fromCharCode(62);
-  const displayNone = "display" + ":" + "none";
-  return "\n\n" + L + "div style=\"" + displayNone + "\"" + G + "\n" +
-    "【开局阶段触发键】\n" +
-    "[[" + "EILATIA_" + "OPENING:" + code + "]]\n" +
-    "[[" + "EILATIA_" + "STAGE:" + code + "]]\n" +
-    "[[" + "EILATIA_" + "VIEW:" + currentVp + "]]\n" +
-    "[[" + "EILATIA_" + "NPC:" + npcM + "]]\n" +
-    "【/开局阶段触发键】\n" +
-    L + "/div" + G;
-}
-
-async function startGame() {
-  const o = OPENINGS[currentId];
-  let story = applyVp(o.body, currentVp, currentNpcMode);
-  if (currentVp === "free") {
-    story += buildFreeEntryHook(o, currentNpcMode);
-  }
-  const playerInfo = document.getElementById("playerInfo").value.trim();
-  const combined = story + stageBlock(o) + statusBlock(o) + (playerInfo ? ("\n\n---\n" + playerInfo) : "");
-  try {
-    if (typeof getChatMessages === "function" && typeof setChatMessages === "function") {
-      const msgs = await getChatMessages(0);
-      if (msgs && msgs.length > 0) {
-        savedOriginalMsg = msgs[0].message;
-        await setChatMessages([{message_id:0, message:combined}]);
-        document.getElementById("btnStart").style.display = "none";
-        document.getElementById("btnBack").style.display = "";
-        document.getElementById("status").textContent = "已载入 0 楼 · " + o.code + " " + o.short_title;
-        return;
+  function deriveFemAliases(rawName) {
+    const nm = cleanSingleLine(rawName);
+    if (!nm) return null;
+    if (!/^[\u4e00-\u9fa5]{2,6}$/.test(nm)) {
+      return { full: nm, surname: nm, cousin: nm, pet: nm };
+    }
+    let surname = nm.slice(0, 1);
+    for (let i = 0; i < COMPOUND_SURNAMES.length; i++) {
+      const cs = COMPOUND_SURNAMES[i];
+      if (nm.indexOf(cs) === 0 && nm.length > cs.length) {
+        surname = cs;
+        break;
       }
     }
-  } catch(e) { console.error(e); }
-  try {
-    const doc = window.parent && window.parent.document;
-    const el = doc && (doc.querySelector("#send_textarea") || doc.querySelector("textarea#send_textarea"));
-    if (el) {
-      el.value = combined;
-      el.dispatchEvent(new Event("input", {bubbles:true}));
-      el.focus();
-      document.getElementById("status").textContent = "已填入输入框，请发送开局";
+    const lastCh = nm.charAt(nm.length - 1);
+    const pet = nm.charAt(0) === "小" ? nm : ("小" + lastCh);
+    const cousin = nm.charAt(0) === "小" ? nm : (surname + "小" + lastCh);
+    return { full: nm, surname: surname, cousin: cousin, pet: pet };
+  }
+
+  function swapHeroineName(txt, rawName) {
+    if (!txt) return "";
+    const al = deriveFemAliases(rawName);
+    if (!al) return String(txt);
+    return String(txt)
+      .replace(/伊小芸/g, al.cousin)
+      .replace(/伊大教授/g, al.surname + "大教授")
+      .replace(/伊大小姐/g, al.surname + "大小姐")
+      .replace(/伊教授/g, al.surname + "教授")
+      .replace(/伊老师/g, al.surname + "老师")
+      .replace(/伊首席/g, al.surname + "首席")
+      .replace(/伊小姐/g, al.surname + "小姐")
+      .replace(/伊总/g, al.surname + "总")
+      .replace(/姓伊的/g, "姓" + al.surname + "的")
+      .replace(/伊芸/g, al.full)
+      .replace(/小芸/g, al.pet);
+  }
+
+  const ARC_SHORT = {
+    "act1_ai_takeover": "一 · 智能接管",
+    "act2_student_reversal": "二 · 权限反转",
+    "act3_outing_app": "三 · 郊游与APP",
+    "act4_arena_sensory": "四 · 竞技与盲行",
+    "act5_rebel_mall": "五 · 张雁与展台",
+    "act6_alien_easter": "✦ 彩蛋 · 星使落难"
+  };
+
+  const MALE_ROLES = [
+    {
+      id: "supreme",
+      icon: "👑",
+      name: "最高密钥主宰",
+      short: "开局执掌华苹底层最高密钥与总控端，当面统御露露、伊芸与众女伴",
+      hint: "👑 最高密钥主宰：经典满权限开局——你从一开始便手握露露底层最高主控权与「亲密玩伴」总控端，当面统御全场。",
+      dossier: "【男主路线：最高密钥主宰】你手握华苹底层最高主控密钥与「亲密玩伴」总控端，亲临第一现场面对面统御露露、伊芸及在场全体女伴。"
+    },
+    {
+      id: "reversal",
+      icon: "⚡",
+      name: "下克上·反客为主",
+      short: "无特权普通学生/后辈开局，当场撞破高冷伊教授的隐秘破绽并步步夺权",
+      hint: "⚡ 下克上·反客为主：拒绝西装霸总模板！你最初只是毫无特权的普通学生/年轻后辈，却在现场撞破高冷伊教授受硬件制约的羞耻秘密，凭把柄与露露的暗中配合一步步反客为主。",
+      dossier: "【男主路线：下克上·反客为主】你并非开局手握特权的上位者，而是看似普通的年轻学生/课题后辈，却在当前现场当面撞破了冰山教授伊芸受智能硬件制约的羞耻秘密（并可顺势接管露露递来的副端权限），从下位者一步步拿捏把柄、反客为主。"
+    },
+    {
+      id: "protector",
+      icon: "🛡",
+      name: "破局共犯·贴身解围",
+      short: "现场唯一识破窘境并替她遮掩解围的知情共犯，可纯爱救援亦可半推半就共沉沦",
+      hint: "🛡 破局共犯·贴身解围：你是现场唯一看穿伊芸窘境并主动替她解围的知情同伴——既可联手对抗露露规则，也可在密室检查与联动试炼中与她半推半就结成贴身共犯。",
+      dossier: "【男主路线：破局共犯·贴身解围】你是当前现场唯一察觉伊芸异样并替她打圆场遮掩的贴身知情人；高傲无助的伊芸只能在私下向你求助依靠，两人由此结成极具张力的秘密共犯关系。"
+    },
+    {
+      id: "insider",
+      icon: "🏠",
+      name: "同居·近水楼台",
+      short: "受长辈托付暂住顶层豪宅客房的同居世弟/挂名未婚夫，露露全力撮合",
+      hint: "🏠 同居·近水楼台：你因长辈托付暂住在伊芸十层顶层豪宅的客房内，露露顺水推舟将你认证为「家中准男主人」，在同一屋檐与日常通勤中处处制造贴身契机。",
+      dossier: "【男主路线：同居·近水楼台】你是受长辈安排暂住在伊芸顶层公寓内的同居年轻男性（世交弟弟或挂名未婚夫），露露积极将你视作屋檐下的准男主人，不断为你创造近水楼台的贴身互动与权限交接机会。"
+    },
+    {
+      id: "custom_male",
+      icon: "✨",
+      name: "完全自拟男主",
+      short: "零预设身份模板、零强加西装霸总设定，100%按你填写的男主姓名与人设展开",
+      hint: "✨ 完全自拟男主：彻底清空固定身份模板！不强加西装大佬或预设背景，完全按你在下方填写的「男主姓名」与「人设补充」亲临现场自由开局。",
+      dossier: "【男主路线：完全自拟男主】不套用任何固定霸总或预设职业模板，严格以玩家自定义的男主姓名、身份外貌与关系设定作为唯一准绳，亲临现场自由展开。"
     }
-  } catch(e) { console.error(e); }
-}
+  ];
 
-async function goBack() {
-  if (!savedOriginalMsg) return;
-  try {
-    await setChatMessages([{message_id:0, message:savedOriginalMsg}]);
-    document.getElementById("btnStart").style.display = "";
-    document.getElementById("btnBack").style.display = "none";
-    updateUI();
-  } catch(e) { console.error(e); }
-}
+  const MALE_SUPREME_SCENE_HOOKS = {
+    penthouse: "恰在此刻，顶层公寓静音门锁已在露露的授意下悄然为你滑开——手握华苹底层最高主控终端的你迈步走入室内，好整以暇地停在伊芸与露露面前，全屋门禁与她身上的每一件穿戴硬件皆听凭你当场调遣。",
+    garage: "恰在此时，手握最高主控终端的你正斜倚在专属车位那辆酒红色智能轿跑旁，目光含笑地迎上刚步入地下车库的伊芸，车载行程与随身锁具权限尽在你的当面掌控之中。",
+    campus: "恰在此时，手持最高主控终端的你就站在北清教学楼走廊与办公室近旁，好整以暇地迎上极力维持学者体面的伊芸教授，连随行女助教燕芝的副机权限也随时听候你当场调遣。",
+    company: "恰在此时，受邀亲临拓康咨询现场坐镇贵宾席的你正近距离注视着台前强自镇定的伊芸首席顾问，掌心总控终端与她身上的隐形穿戴硬件保持着零延迟当面直连。",
+    camp: "与此同时，亲临城郊湖畔营地现场的你就坐在遮阳天幕主位上，不仅当面统御着伊芸的限距项圈，连同场的燕芝与张雁手机里的「亲密玩伴」副端也随时可由你一键反转收服。",
+    mall: "恰在此时，手握最高主控终端的你就闲庭信步地走在伊芸身侧半步之遥，在这座繁华商业广场内近距离审视着她的一举一动，随身锁具与耳麦指令皆由你当场操控。"
+  };
 
-(function(){
-  document.getElementById("playerInfo").value = PLAYER_INFO_MAP["free_keep"];
-  updateUI();
+  const MALE_SUPREME_NODE_HOOKS = {
+    N01: "恰在此刻，刚完成联网激活的露露已悄然识别出你所持有的华苹最高主控密钥，主动为你敞开顶层公寓大门——你迈步走入客厅停在伊芸与露露近前，微笑着当场接管这座顶层豪宅的最高权限。",
+    N02: "恰在此刻，顶层公寓主卧房门在露露的静音引导下为你敞开——手握最高主控终端的你缓步走到床畔与跑步机近旁，近距离俯瞰着佩戴脑波耳钉、脸颊微红的伊芸。",
+    N03: "恰在此时，手持最高主控终端的你正站在专属车库与北清教学楼讲台近旁，当面迎上双腿微颤却强撑威严的伊芸教授，连一旁乖巧候命的女助教燕芝也不由向你投来敬畏目光。",
+    N04: "恰在此刻，露露已为你静音敞开顶层公寓护理间的房门——手握最高主控终端的你缓步走入室内停在躺椅侧畔，当场撞见并接管了正满脸绯红、无处躲藏的伊芸。",
+    N07: "而此刻，留宿顶层公寓确立唯一男主人主权的你正气定神闲地坐在训练室真皮沙发上，当面督导露露对伊芸展开每一项柔顺礼仪与声控条件反射特训。",
+    N08: "而此刻，作为特邀贵宾亲临拓康咨询会议室现场的你正坐在席首（并缓步来到走廊近旁），近距离欣赏着伊芸首席顾问在隐形内衣脉冲下强撑体面的动人模样，整间会议室与她的随身开关皆在你的掌控之中。",
+    N09: "而此刻，你早已以核心主控者身份同乘在这辆前往城郊湖畔的露营车内，就坐在双马尾学生装扮的「伊小芸」身侧，掌心总控终端随时统御着车内外所有玩伴的权限。",
+    N11: "而此刻，亲临湖畔烤鱼营地现场的你就坐在天幕主位上，当面将「亲密玩伴」APP最高主控权握于掌心——同场的女助教燕芝与叛逆少女张雁所持有的不过是随时可被你一键反转为陪练副机的子端。",
+    N12: "而此刻，手握最高主控终端的你就坐在北清教授办公室沙发与模拟辩论教室后排当场压阵，近距离审视着讲席上坐立难安的伊教授与一旁耳尖微红的女助教燕芝。",
+    N13: "而此刻，手握最高主控密钥的你正坐在伊芸教授办公室的真皮沙发上当场督阵——无论是站在透明落地窗前戴面具试播的伊教授，还是在一旁架设手机、自己却偷偷试戴过副机耳夹的女助教燕芝，随时都可由你当场一并调教。",
+    N14: "恰在此刻，一身得体西装的你已亲自来到顶层公寓门前与楼下专车旁，在露露笑意盈盈的迎接下当面带走换好青春网球裙的伊芸，开启只属于你的周末专场试炼。",
+    N15: "而此刻，同在昏暗激光竞技迷宫内的你正持枪缓步走到被磁力战靴锁死在角落的伊芸面前，隔着断绝视听的头盔近距离主导着这场专属于你的赛场惩戒。",
+    N18: "而此刻，手握最高主控终端的你就坐在北清期末考场后排督考席（并随时进出考前休息室），当面操控着讲台上强装镇定的伊教授与一旁协助监考的女助教燕芝。",
+    N19: "恰在此刻，顶层公寓的静音门锁应声为你滑开——手握最高主控终端的你迈步走入客厅与开放式厨房前，当面迎上正被露露严格管控饮食起居、满脸羞窘的伊芸。",
+    N20: "恰在此时，手握华苹底层最高主控密钥的你也缓步走出地下车库电梯厅，就站在酒红色轿跑车头前——无论是受制于人的伊芸，还是晃着手机虚张声势的十九岁叛逆千金张雁，此刻都处在你的当面压制之下，你随时可一键反转张雁的副机将两人一并收服。",
+    N21: "而此刻，由露露底层协议同步引路亲临现场的你正坐在客厅主位沙发上近距离压阵——面前低眉顺眼自称「小芸」的伊教授，与一旁色厉内荏、极怕家里断掉零花钱的十九岁叛逆千金张雁，随时都可由你当场一并立下家规收服。",
+    N22: "而此刻，手握最高主控终端的你就闲庭信步地走在伊芸身侧半米处，在繁华喧嚣的市中心购物广场内贴身审视着她盲行摸索的每一步，耳塞口令皆由你当面发出。",
+    N23: "而此刻，亲临购物广场中央展台现场的你就站在队伍近旁（并随她一同转赴拓康咨询首席办公室），当面掌控着展台体验与门外两位特约女助理燕芝、张雁的全部主副权限。",
+    N24: "而此刻，手握最高主控权限的你就坐在拓康咨询首席顾问办公室的真皮会客沙发上亲自坐镇——无论是褪去职业装束的伊芸，还是门外刚入驻特约助理席的知性助教燕芝与高马尾千金张雁，三位绝色皆在你的当场统御之下。",
+    X01: "恰在此刻，手握华苹底层最高主控密钥、正陪伊芸在顶层露台透气的你缓步上前，当面审视着这位受《土著保护法》限制无法动武的黑长直异星公使希蓉，二号副耳钉与全屋权限尽归你执掌。",
+    X02: "恰在此时，作为晚宴唯一主宾坐镇席首的你正近距离欣赏着步步银铃轻响的异星公使希蓉与盛装伊芸，手中的银哨口令与在场众女的副端手链皆由你当场统御。",
+    X03: "恰在此时，作为会展VIP特权收藏家站在水晶展台正前方的你，正近距离审视着台上屏息扮演静态仿生人偶的希蓉与伊芸，散场后两只转运舱更将直接送入你在顶层公寓的主场。",
+    X04: "恰在此时，作为常温超导项目最高资方代表坐镇首席顾问室主位沙发的你，正近距离注视着隔桌交锋的白西装女总裁希蓉与黑套裙顾问伊芸，一句口令即可令双姝与在场女秘书双双听命。",
+    X05: "恰在此时，亲自坐镇测试室主位单人椅的你正握着总控平板，近距离把控着身穿超导微感黑丝的希蓉与伊芸的每一丝同频反馈，室内众美皆在你的当场掌控之中。"
+  };
+
+  function buildFlexMaleHook(n, bucket) {
+    const nm = cleanSingleLine(maleName);
+    const bio = cleanSingleLine(maleBio);
+    const who = nm ? ("身为「" + nm + "」的你") : "你";
+    const bioNote = bio ? ("（" + bio + "）") : "";
+    const isEaster = n.code.indexOf("X") === 0;
+
+    if (curMaleRole === "reversal") {
+      if (isEaster) {
+        return "恰在此刻，因替课题组送件跟上现场的" + who + bioNote + "不仅当面撞破了伊芸教授私下的羞窘秘密，更迎面遇上了受《土著保护法》掣肘不敢动武的异星公使希蓉——在露露意味深长的促狭配合下，两位高傲美人的把柄同时落入了你的掌心。";
+      }
+      const mapRev = {
+        penthouse: "恰在此刻，因送交急件被露露笑眯眯放入顶层公寓室内的" + who + bioNote + "正站在客厅近旁——平日高不可攀的伊芸教授此刻衣着与神态间的羞耻破绽被你当面撞了个正着，露露更悄然向你开放了临时副端配对请求，让你得以凭这桩秘密反客为主。",
+        garage: "恰在此时，因顺路搭车刚走到地下车库酒红色轿跑旁的" + who + bioNote + "，当面撞见了双腿紧绷、极力掩饰随身硬件异响的伊芸教授——这位平日威严冷艳的名师第一次在你面前露出了无处遁形的软肋。",
+        campus: "恰在此时，拿着课业材料走入北清教室与办公间近旁的" + who + bioNote + "，零距离捕捉到了伊芸教授强撑学者体面下的细微颤抖与耳尖绯红；昔日令人敬畏的冰山教授把柄已落入你眼中，主客之势正悄然逆转。",
+        company: "恰在此时，以初级随行助理身份列席拓康现场近旁的" + who + bioNote + "，一眼看穿了台前伊芸首席顾问极力压抑的失态与隐秘硬件的微响——只要你上前一步低声点破，这位高傲首席便只能乖乖听凭你拿捏。",
+        camp: "恰在此时，以同行学生后辈身份站在湖畔营地天幕下的" + who + bioNote + "，正近距离打量着被迫扮作十九岁学生妹、戴着限距项圈坐立难安的伊芸教授，连露露分发的「亲密玩伴」副端权限也悄然跳到了你的手机上。",
+        mall: "恰在此时，在商业广场与场馆现场和她迎面撞上的" + who + bioNote + "就站在半步之外，将这位高冷女教授罕见的窘迫与羞耻尽收眼底，随时可以凭这桩秘密下克上夺回主动权。"
+      };
+      return mapRev[bucket] || mapRev.penthouse;
+    }
+
+    if (curMaleRole === "protector") {
+      if (isEaster) {
+        return "恰在此刻，正陪在伊芸身侧帮她稳住阵脚的" + who + bioNote + "当面迎上了初临地球的异星公使希蓉——在露露的智能规矩与《土著保护法》交织的现场，你成了伊芸与希蓉双姝唯一能贴身倚仗的知情共犯。";
+      }
+      const mapPro = {
+        penthouse: "恰在此刻，受伊芸暗中求助（并被露露礼貌放行）步入顶层公寓室内的" + who + bioNote + "正站在她身侧——面对露露滴水不漏的家政规矩与身上无法自解的穿戴锁具，羞愤无助的伊芸只能红着脸向近在咫尺的你投来求助目光。",
+        garage: "恰在此时，特意赶到地下车库酒红色轿跑旁的" + who + bioNote + "稳稳站到伊芸身边，在智能座驾与露露规则启动的瞬间成为她唯一能贴身依靠的秘密共犯。",
+        campus: "恰在此时，守在北清讲台与教授办公室近旁的" + who + bioNote + "及时上前一步替双腿发软的伊芸教授挡开旁人视线——在这间随时可能曝光秘密的校园现场，唯有近在咫尺的你能替她解围周旋。",
+        company: "恰在此时，作为她唯一信任的知情同伴站在拓康会议室与走廊近旁的" + who + bioNote + "，正不动声色地替强撑威严的伊芸首席顾问遮掩失态，与她共渡这场惊险又暧昧的职场试炼。",
+        camp: "恰在此时，以贴身同伴身份陪在湖畔营地天幕下的" + who + bioNote + "就坐在双马尾装扮的伊芸身旁，随时准备替受限距项圈掣肘的她挡下试探、化解困局（或接过副端控制权）。",
+        mall: "恰在此时，一路贴身护在伊芸半步之侧的" + who + bioNote + "正陪她穿行在商业广场与场馆现场，成为她在羞耻规则下唯一敢轻轻攥住衣角求助的依靠。"
+      };
+      return mapPro[bucket] || mapPro.penthouse;
+    }
+
+    if (curMaleRole === "insider") {
+      if (isEaster) {
+        return "恰在此刻，同住这座十层顶层豪宅的" + who + bioNote + "正陪伊芸在现场透气，恰好与降临于此的异星公使希蓉打了个照面——这下同一屋檐下不仅有冰山教授伊芸，更要多出一位绝色外星使节同居生活。";
+      }
+      const mapIns = {
+        penthouse: "恰在此刻，暂住在顶层公寓客房内的" + who + bioNote + "推门走出走廊，正好与客厅里的伊芸和露露撞个满怀——露露笑盈盈地将你认证为屋檐下的准男主人，顺水推舟把近水楼台的你拉进了这桩居家新规之中。",
+        garage: "恰在此时，准备与伊芸同车出行的" + who + bioNote + "已一道下到地下车库酒红色轿跑旁，露露贴心地将主副座舱同调提示呈现在你面前，让这段同居通勤多了几分心照不宣的暧昧。",
+        campus: "恰在此时，早上刚从同一套顶层公寓乘车同来的" + who + bioNote + "就站在北清教学楼与办公室近旁，外人眼中的高冷名师与同居屋檐下的羞窘模样在你眼前交叠成独一份的私密反差。",
+        company: "恰在此时，以世交亲眷兼随行顾问身份同在拓康现场的" + who + bioNote + "就坐在近旁，唯有同住一屋的你清楚台前冷艳威严的伊首席出门前经历了怎样的穿戴规训。",
+        camp: "恰在此时，以家中同住表亲身份一道随车来到湖畔营地的" + who + bioNote + "就坐在「伊小芸」身侧，露露更顺势将你的手机设为同居监护席位，任你近距离把控全场节奏。",
+        mall: "恰在此时，陪着同住屋檐下的伊芸一同出门来到商业广场现场的" + who + bioNote + "就走在她身侧，露露笑眯眯地把随行监管权交到了近水楼台的你手中。"
+      };
+      return mapIns[bucket] || mapIns.penthouse;
+    }
+
+    return "恰在此刻，身处同一现场的" + who + bioNote + "正近在咫尺地迎面遇上眼前的伊芸与这一幕情景——全场再无其他男性干扰，接下来要如何开口、介入或主导局势，全凭你的心意与自定人设自由展开。";
+  }
+
+  const PRESET_ROLES = [
+    {
+      id: "phd",
+      icon: "🎓",
+      name: "北清博士生",
+      short: "同校普通在读博士生，住单人博士寝室",
+      dossier: "【路人预设：北清大学普通在读博士生】你是北清大学一名普通的在读博士生，住在校内安静独立的单人博士生寝室。你并非伊芸名下的直系学生，也没有任何特殊背景，平时只是偶尔在经管楼、图书馆或食堂远远见过这位年轻出名的统计经济系荣誉教授。",
+      hooks: {
+        penthouse: "同一时刻，几公里外的北清大学单人博士生寝室里，刚整理完手头文献的你正准备出门处理日常杂务——此时的你还毫不知情，学校里那位素来高冷威严的伊芸教授，私人生活正悄然失控。",
+        garage: "恰在此时，刚帮课题组跑完校外送件差事、步行经过这栋公寓外侧车道口的你，不经意瞥见地下车库坡道旁那辆酒红色轿跑与神色有些反常的伊芸教授。",
+        campus: "恰在此时，刚从单人博士寝室出来、夹着几本专业书走过北清大学教学楼道的你，迎面遇见了平日里冷若冰霜的伊芸教授——只是离近了看，她此刻的神态似乎比平时多了几分异样。",
+        company: "恰在此时，替导师跑腿来拓康咨询前台递交一份普通校企统计资料的你正站在公共走廊边等回执，恰好望见在校兼任荣誉教授的伊芸从不远处走过。",
+        camp: "恰在此时，周末独自背着包来城郊这片公共湖畔散步透气的你，偶然看见不远处露营车旁站着个扎双马尾的年轻女子，侧脸竟与学校里的伊芸教授格外相像。",
+        mall: "恰在此时，从学校单人寝室坐地铁来市中心商业广场买生活用品的你路过中庭走廊，不经意间在人群里瞥见了一道颇像北清伊芸教授的身影。"
+      }
+    },
+    {
+      id: "undergrad",
+      icon: "📚",
+      name: "选修本科生",
+      short: "统计经济学大课后排普通本科生",
+      dossier: "【路人预设：北清普通选修课学生】你是北清大学一名成绩平平的普通本科生，这学期刚好选修了伊芸教授的大课。平时你习惯坐在阶梯教室后排角落，在严厉的伊教授眼里只是选课名单上最不起眼的普通学生之一。",
+      hooks: {
+        penthouse: "同一时刻，北清大学学生生活区里刚下早课的你正拎着早餐往回走，随手翻看着课程群里的通知，浑然不知讲台上那位令人敬畏的伊大教授家里正发生着怎样的剧变。",
+        garage: "恰在此时，在市中心兼职做家教刚下班、路过这栋高档公寓街口的你，偶然看见车库入口那辆眼熟的酒红色小车旁站着酷似选修课任课老师伊芸的女子。",
+        campus: "恰在此时，背着双肩包正慢吞吞赶往教学楼上课的你走在校园步道上，冷不防与平时在讲台上不苟言笑的伊芸教授打了个照面。",
+        company: "恰在此时，趁课余时间来拓康咨询参加普通实习生宣讲面试的你刚走出电梯间，意外在走廊另一头看见了统计经济学大课上的伊芸教授。",
+        camp: "恰在此时，趁周末跟同寝室友搭大巴来城郊湖边野餐的你路过隔壁营位，惊讶地发现那边被众人叫作“小芸”的双马尾女生竟像极了系里的伊芸教授。",
+        mall: "恰在此时，周末来市中心购物广场闲逛解闷的你正站在扶梯口，一眼认出了不远处那个装扮与课堂上判若两人的年轻女人似乎正是伊芸老师。"
+      }
+    },
+    {
+      id: "clerk",
+      icon: "💼",
+      name: "拓康职员",
+      short: "公共工位初级分析员，独居出租屋",
+      dossier: "【路人预设：拓康咨询普通基层职员】你是拓康咨询公司大开间公共办公区的一名普通初级分析员，在市区租了一间普通的单身一居室。平时只在部门例会或茶水间远远见过高高在上的伊芸首席顾问，两人此前连一句话都没单独说过。",
+      hooks: {
+        penthouse: "同一时刻，租住在市区普通单身公寓里的你刚收拾好通勤包准备去拓康咨询打卡上班，还不知道公司里那位向来说一不二的伊芸首席顾问已被家中的新管家接管了生活。",
+        garage: "恰在此时，受行政部指派顺路送一份普通纸质函件途经市中心公寓楼下的你，恰巧看见公司里那位高傲冷艳的伊芸首席顾问站在车库旁，神色有些古怪。",
+        campus: "恰在此时，被小组长派去北清大学送交一份常规合作项目宣传册的你走在陌生的校园走廊里，迎面撞见了在大学兼任教授的公司首席顾问伊芸。",
+        company: "恰在此时，端着水杯刚从拓康咨询公共茶水间出来的你走过办公区走廊，无意间撞见平时气场凌厉的伊芸首席顾问正极力掩饰着某种失态。",
+        camp: "恰在此时，周末独自去城郊公共湖区钓鱼放松的你经过一片热闹的露营草坪，意外发现人群里那个低眉顺眼的年轻姑娘竟酷似公司里的伊芸顾问。",
+        mall: "恰在此时，下班后顺路来市中心商业广场吃简餐的你走出店门，不经意间看见前面不远处那位举止有些局促的高挑女子竟像是公司的伊芸首席顾问。"
+      }
+    },
+    {
+      id: "staff",
+      icon: "🔧",
+      name: "华苹检修员",
+      short: "商场华苹直营店基层售后员，住职工单间",
+      dossier: "【路人预设：华苹门店普通售后检修员】你是商业中心华苹直营店的一名普通基层售后技术员，住在普通单人职工宿舍。你没有研发特权或黑客后门，每天只是按工单跑腿检修常规家电，唯一的长处是对华苹穿戴产品的外观型号略熟一些。",
+      hooks: {
+        penthouse: "恰在此刻，按今日常规社区巡检工单来到这栋十层公寓楼宇核对公共网关信号的你刚走出电梯间，隐约留意到顶层住户门内刚完成了一台华苹高阶家用机型的联网激活。",
+        garage: "恰在此时，背着常规工具包刚给同楼其他住户做完智能门锁例行维护、步行穿过地下车库的你，无意间瞥见了不远处酒红色智能车旁神情紧绷的年轻女业主。",
+        campus: "恰在此时，按门店售后派单来北清大学教研楼更换公共多媒体配件的你背着工具包走过走廊，迎面遇见了一位佩戴着华苹新款定制穿戴配件的冷艳女教授。",
+        company: "恰在此时，来拓康咨询办公层检修会议室投屏设备的你正蹲在走廊边整理工具箱，一抬头恰好看见首席顾问伊芸步履略显异样地从面前经过。",
+        camp: "恰在此时，轮休日在城郊湖畔公园骑行散心的你路过一片露营区，职业习惯让你一眼认出队伍里那名双马尾女子手腕与颈间佩戴的都是华苹最新款智能穿戴硬件。",
+        mall: "恰在此时，刚在商业广场华苹直营店换下工装准备去买杯饮料的你走出店门，一眼注意到了不远处穿戴着多件华苹智能配件、脸颊微红的高挑女子。"
+      }
+    },
+    {
+      id: "tenant",
+      icon: "🏠",
+      name: "同街区租客",
+      short: "周边独居自由职业者，日常街坊路人",
+      dossier: "【路人预设：同街区普通独居租客】你是租住在同一片城区普通单身公寓里的年轻自由职业者，与北清大学和拓康咨询都毫无瓜葛。平时你只在附近公园晨练或逛超市时远远见过那位身材出众的冷艳美女几面，是纯粹的都市陌生街坊。",
+      hooks: {
+        penthouse: "同一时刻，住在相隔两条街的普通单身出租屋里的你刚晨练归来冲完澡，正对着窗外繁华街景喝着冰水，与那栋顶层豪宅里的暗流仅隔着咫尺街区。",
+        garage: "恰在此时，抄近路经过附近公寓街区外侧步道的你，偶然瞥见地下车库出口那辆醒目的酒红色小车，以及车旁那位以前在公园晨跑时擦肩见过的长腿美女。",
+        campus: "恰在此时，来北清大学开放校园内借用公共跑道散步的你走在林荫道边，意外发现迎面走来的那位女老师正是平时在街区公园见过几面的冷艳美女。",
+        company: "恰在此时，去写字楼底商咖啡厅取外卖咖啡的你站在大堂旋转门旁，恰好看见那位眼熟的高挑美女神色匆匆地走进办公电梯厅。",
+        camp: "恰在此时，趁周末独自来城郊湖边露营散心的你在湖岸边散步，意外看见邻近营地里有个双马尾女孩，长相竟和你在市区街角见过的那位高冷美女一模一样。",
+        mall: "恰在此时，在常去的商业购物中心采购一周食材的你推着购物车走过转角，迎面撞见了平时在街区见过几面、今天装束却格外反常的那位高挑美女。"
+      }
+    },
+    {
+      id: "custom",
+      icon: "✦",
+      name: "空白自拟",
+      short: "不附加预设身份与尾段，完全自由发挥",
+      dossier: "【完全空白自拟】不加载任何预设身份模板，开局正文保持纯粹的第三人称（「伊芸 / 她」）叙事。",
+      hooks: null
+    }
+  ];
+
+  function saveStash() {
+    try {
+      if (window.parent) {
+        window.parent.__luluPanelStash = {
+          note: document.getElementById("customNote").value || "",
+          readerH: document.getElementById("lrScroll").style.height || "",
+          search: curSearch || "",
+          freeRole: curFreeRole,
+          maleRole: curMaleRole,
+          maleName: maleName,
+          maleBio: maleBio,
+          femName: femName,
+          femBio: femBio
+        };
+      }
+    } catch (e) {}
+  }
+
+  function restoreStash() {
+    try {
+      const st = window.parent && window.parent.__luluPanelStash;
+      if (st) {
+        if (st.note) document.getElementById("customNote").value = st.note;
+        if (st.readerH) document.getElementById("lrScroll").style.height = st.readerH;
+        if (st.search) {
+          curSearch = st.search;
+          document.getElementById("searchIn").value = st.search;
+        }
+        if (st.freeRole && FREE_ROLE_IDS.indexOf(st.freeRole) >= 0) curFreeRole = st.freeRole;
+        if (st.maleRole && MALE_ROLE_IDS.indexOf(st.maleRole) >= 0) curMaleRole = st.maleRole;
+        if (typeof st.maleName === "string") {
+          maleName = st.maleName;
+          document.getElementById("maleNameIn").value = maleName;
+        }
+        if (typeof st.maleBio === "string") {
+          maleBio = st.maleBio;
+          document.getElementById("maleBioIn").value = maleBio;
+        }
+        if (typeof st.femName === "string") {
+          femName = st.femName;
+          document.getElementById("femNameIn").value = femName;
+        }
+        if (typeof st.femBio === "string") {
+          femBio = st.femBio;
+          document.getElementById("femBioIn").value = femBio;
+        }
+      }
+    } catch (e) {}
+  }
+
+  async function switchArcPack(targetPackArc, nextCurArc, nextNodeId, nextStep) {
+    saveStash();
+    const roleSlot = curMode === "male" ? curMaleRole : curFreeRole;
+    const stateStr = [
+      nextCurArc,
+      targetPackArc,
+      nextNodeId,
+      nextStep,
+      curMode,
+      curNpc,
+      roleSlot,
+      curFemPov,
+      showPref ? "1" : "0",
+      curXcast,
+      curFemMode
+    ].join(":");
+    const nextToken =
+      OB + OB + "LULU_" + "UI:" + stateStr + CB + CB +
+      OB + OB + "LULU_" + "PACK:" + targetPackArc + CB + CB;
+
+    const info = document.getElementById("dockMsg");
+    info.textContent = "⟳ 正在按需载入章节数据包…";
+    try {
+      if (typeof setChatMessages === "function") {
+        await setChatMessages([{ message_id: 0, message: nextToken }]);
+        return;
+      }
+      const p = window.parent;
+      if (p && typeof p.setChatMessages === "function") {
+        await p.setChatMessages([{ message_id: 0, message: nextToken }]);
+        return;
+      }
+      if (p && p.SillyTavern && typeof p.SillyTavern.getContext === "function") {
+        const ctx = p.SillyTavern.getContext();
+        if (ctx && Array.isArray(ctx.chat) && ctx.chat.length > 0) {
+          ctx.chat[0].mes = nextToken;
+          if (typeof ctx.saveChat === "function") await ctx.saveChat();
+          if (typeof ctx.reloadCurrentChat === "function") await ctx.reloadCurrentChat();
+          return;
+        }
+      }
+    } catch (err) {
+      info.textContent = "提示：" + String(err);
+    }
+  }
+
+  function splitQuoteSpans(txt) {
+    const out = [];
+    const re = /(“[^”]*”|「[^」]*」)/g;
+    let pos = 0;
+    let m;
+    while ((m = re.exec(txt)) !== null) {
+      if (m.index > pos) out.push([false, txt.slice(pos, m.index)]);
+      out.push([true, m[0]]);
+      pos = m.index + m[0].length;
+    }
+    if (pos < txt.length) out.push([false, txt.slice(pos)]);
+    return out;
+  }
+
+  function jsTo3rd(para) {
+    const spans = splitQuoteSpans(para);
+    let named = false;
+    const out = [];
+    for (let i = 0; i < spans.length; i++) {
+      const isQ = spans[i][0];
+      const chunk = spans[i][1];
+      if (isQ) {
+        if (chunk.indexOf("伊芸") >= 0 || chunk.indexOf("伊教授") >= 0) named = true;
+        out.push(chunk);
+      } else {
+        const s = chunk.replace(/我们俩/g, "两人").replace(/我们/g, "她们").replace(/我自己/g, "她自己");
+        let buf = "";
+        for (let j = 0; j < s.length; j++) {
+          const ch = s.charAt(j);
+          if (ch === "我") {
+            if (!named) {
+              buf += "伊芸";
+              named = true;
+            } else {
+              buf += "她";
+            }
+          } else {
+            buf += ch;
+          }
+        }
+        out.push(buf);
+      }
+    }
+    return out.join("");
+  }
+
+  function jsTo2nd(para) {
+    const spans = splitQuoteSpans(para);
+    const out = [];
+    for (let i = 0; i < spans.length; i++) {
+      if (spans[i][0]) {
+        out.push(spans[i][1]);
+      } else {
+        out.push(
+          spans[i][1]
+            .replace(/我们俩/g, "你们俩")
+            .replace(/我们/g, "你们")
+            .replace(/我自己/g, "你自己")
+            .replace(/我/g, "你")
+        );
+      }
+    }
+    return out.join("");
+  }
+
+  function getSegArray(n) {
+    const pack = PACK_BY_ID[n.id];
+    if (!pack || !pack.s) return [];
+    const useFull = n.code.indexOf("X") === 0 && curXcast === "full";
+    const sf = useFull ? (pack.sf || {}) : {};
+    const baseSegs = pack.s.map(function(sg, si) {
+      if (!useFull) return sg;
+      return sg.split("\n\n").map(function(pr, pi) {
+        const key = si + ":" + pi;
+        return Object.prototype.hasOwnProperty.call(sf, key) ? sf[key] : pr;
+      }).join("\n\n");
+    });
+
+    if (curMode === "female") {
+      const pfe = (curNpc === "erase" && pack.pfe) ? pack.pfe : {};
+      const fName = cleanSingleLine(femName);
+      return baseSegs.map(function(sg, si) {
+        const mapped = sg.split("\n\n").map(function(pr, pi) {
+          const key = si + ":" + pi;
+          const p1 = Object.prototype.hasOwnProperty.call(pfe, key) ? pfe[key] : pr;
+          return curFemPov === "first" ? p1 : jsTo2nd(p1);
+        }).join("\n\n");
+        return (curFemMode === "custom" && fName) ? swapHeroineName(mapped, fName) : mapped;
+      });
+    }
+
+    const p3 = pack.p3 || {};
+    const pm = pack.pm || {};
+    const pe = pack.pe || {};
+    const p3f = useFull ? (pack.p3f || {}) : {};
+    const pmf = useFull ? (pack.pmf || {}) : {};
+    const pef = useFull ? (pack.pef || {}) : {};
+    const useSupremeMale = (curMode === "male" && curMaleRole === "supreme");
+    const useCleanErase = (curMode === "male" && curMaleRole !== "supreme") || (curMode === "free" && curNpc === "erase");
+
+    return baseSegs.map(function(sg, si) {
+      const paras = sg.split("\n\n");
+      return paras.map(function(pr, pi) {
+        const key = si + ":" + pi;
+        const base3 = Object.prototype.hasOwnProperty.call(p3f, key)
+          ? p3f[key]
+          : (Object.prototype.hasOwnProperty.call(p3, key) ? p3[key] : jsTo3rd(pr));
+        if (useSupremeMale) {
+          if (Object.prototype.hasOwnProperty.call(pmf, key)) return pmf[key];
+          return Object.prototype.hasOwnProperty.call(pm, key) ? pm[key] : base3;
+        }
+        if (useCleanErase) {
+          if (Object.prototype.hasOwnProperty.call(pef, key)) return pef[key];
+          return Object.prototype.hasOwnProperty.call(pe, key) ? pe[key] : base3;
+        }
+        return base3;
+      }).join("\n\n");
+    });
+  }
+
+  function adaptPref(p) {
+    if (!p) return "";
+    if (curMode === "female") {
+      const target = curFemPov === "first" ? "我" : "你";
+      const fName = cleanSingleLine(femName);
+      let out = p;
+      if (curFemMode === "custom") {
+        const labelTarget = fName ? (fName + "（" + target + "）") : target;
+        out = out
+          .replace(/24岁北清双博士教授兼拓康首席顾问伊芸/g, labelTarget)
+          .replace(/24岁北清双博士教授伊芸/g, labelTarget)
+          .replace(/双博士教授伊芸/g, labelTarget);
+        if (fName) out = swapHeroineName(out, fName);
+        return out.replace(/伊芸/g, target);
+      }
+      return out
+        .replace(/24岁北清双博士教授兼拓康首席顾问伊芸/g, "身为24岁北清双博士教授兼拓康首席顾问的" + target)
+        .replace(/24岁北清双博士教授伊芸/g, "身为24岁北清双博士教授的" + target)
+        .replace(/双博士教授伊芸/g, "身为双博士教授的" + target)
+        .replace(/伊芸/g, target);
+    }
+    return viewText(p);
+  }
+
+  function getNodeMeta(n) {
+    if (n.code.indexOf("X") === 0 && curXcast === "full") {
+      if (curMode === "male" && curMaleRole === "supreme" && n.mmf) return n.mmf;
+      if (n.mf) return n.mf;
+    }
+    if (curMode === "male") {
+      return curMaleRole === "supreme" ? (n.mm || n) : (n.em || n);
+    }
+    if (curNpc === "erase" && n.em) return n.em;
+    return n;
+  }
+
+  function getPrefArray(n) {
+    const pack = PACK_BY_ID[n.id];
+    if (!pack || !pack.p) return [];
+    if (n.code.indexOf("X") === 0 && curXcast === "full") {
+      if (curMode === "male" && curMaleRole === "supreme" && pack.pmf_p) return pack.pmf_p;
+      if (pack.pf_p) return curMode === "female" ? pack.pf_p.map(adaptPref) : pack.pf_p;
+    }
+    if (curMode === "male") {
+      if (curMaleRole === "supreme" && pack.pm_p) return pack.pm_p;
+      if (pack.pe_p) return pack.pe_p;
+    }
+    if (curNpc === "erase" && pack.pe_p) {
+      return curMode === "female" ? pack.pe_p.map(adaptPref) : pack.pe_p;
+    }
+    return pack.p.map(adaptPref);
+  }
+
+  function getFreeRoleById(rid) {
+    for (let i = 0; i < PRESET_ROLES.length; i++) {
+      if (PRESET_ROLES[i].id === rid) return PRESET_ROLES[i];
+    }
+    return PRESET_ROLES[0];
+  }
+
+  function getMaleRoleById(rid) {
+    for (let i = 0; i < MALE_ROLES.length; i++) {
+      if (MALE_ROLES[i].id === rid) return MALE_ROLES[i];
+    }
+    return MALE_ROLES[0];
+  }
+
+  function getSceneBucket(loc) {
+    const s = String(loc || "");
+    if (s.indexOf("车库") >= 0 || s.indexOf("停车场") >= 0) return "garage";
+    if (s.indexOf("露营") >= 0 || s.indexOf("湖畔") >= 0) return "camp";
+    if (s.indexOf("拓康") >= 0 || s.indexOf("会议室") >= 0) return "company";
+    if (s.indexOf("北清") >= 0 || s.indexOf("校园") >= 0 || s.indexOf("考场") >= 0 || s.indexOf("教授办公") >= 0) return "campus";
+    if (s.indexOf("购物") >= 0 || s.indexOf("商场") >= 0 || s.indexOf("激光") >= 0) return "mall";
+    return "penthouse";
+  }
+
+  function stripQuoted(txt) {
+    return String(txt || "").replace(/“[^”]*”|「[^」]*」/g, "");
+  }
+
+  function scrubEraseLabels(str) {
+    return String(str || "")
+      .replace(/男助教昊鹏/g, "女助教燕芝")
+      .replace(/比昊鹏和燕芝/g, "比燕芝")
+      .replace(/昊鹏与燕芝/g, "燕芝与张雁")
+      .replace(/燕芝和昊鹏/g, "燕芝与闺蜜")
+      .replace(/昊鹏和燕芝/g, "燕芝与张雁")
+      .replace(/差生李德/g, "燕芝")
+      .replace(/差生赴约/g, "燕芝赴约")
+      .replace(/赴差生之约/g, "赴燕芝之约")
+      .replace(/差生反转/g, "智能接管")
+      .replace(/登记新男主人并展示伴侣模块/g, "登记特权监管席位并展示护理模块")
+      .replace(/高城邀约/g, "燕芝伴游")
+      .replace(/白西装高城/g, "白西装裙燕芝")
+      .replace(/五位玩伴/g, "双姝玩伴")
+      .replace(/五人组/g, "双姝玩伴组")
+      .replace(/比男生还狠/g, "手段精明促狭")
+      .replace(/李德/g, "燕芝")
+      .replace(/昊鹏/g, "燕芝")
+      .replace(/高城/g, "燕芝")
+      .replace(/陆虎/g, "张雁")
+      .replace(/男主人/g, "特权监管人")
+      .replace(/男助教/g, "女助教")
+      .replace(/差生/g, "助教");
+  }
+
+  function viewText(str) {
+    if (!str) return "";
+    let out = String(str);
+    if (curMode === "female") {
+      if (curNpc === "erase") out = scrubEraseLabels(out);
+      const fName = cleanSingleLine(femName);
+      if (curFemMode === "custom" && fName) {
+        return swapHeroineName(out, fName);
+      }
+      return out;
+    }
+    if (curMode === "male") {
+      if (curMaleRole !== "supreme") {
+        return scrubEraseLabels(out);
+      }
+      return out
+        .replace(/男助教昊鹏/g, "亲临现场的你")
+        .replace(/昊鹏与燕芝/g, "你与燕芝")
+        .replace(/燕芝和昊鹏/g, "燕芝与你")
+        .replace(/昊鹏和燕芝/g, "你与燕芝")
+        .replace(/差生李德/g, "你")
+        .replace(/差生赴约/g, "主控赴约")
+        .replace(/赴差生之约/g, "赴你的专属之约")
+        .replace(/差生反转/g, "权限反转")
+        .replace(/高城邀约/g, "专场邀约")
+        .replace(/白西装高城/g, "一身西装的你")
+        .replace(/五位玩伴/g, "你与众女伴")
+        .replace(/五人组/g, "主副权限组")
+        .replace(/李德/g, "你")
+        .replace(/昊鹏/g, "你")
+        .replace(/高城/g, "你")
+        .replace(/陆虎/g, "女伴")
+        .replace(/男助教/g, "你")
+        .replace(/差生/g, "你");
+    }
+    if (curNpc === "erase") {
+      return scrubEraseLabels(out);
+    }
+    return out;
+  }
+
+  function getStepCount(n) {
+    const m = getNodeMeta(n);
+    return (m.events && m.events.length) ? m.events.length : 3;
+  }
+
+  function getActivePreface(n) {
+    if (curStep === 0 || !showPref) return "";
+    const arr = getPrefArray(n);
+    const maxIdx = Math.max(0, arr.length - 1);
+    const idx = Math.max(0, Math.min(maxIdx, curStep - 1));
+    return arr[idx] || "";
+  }
+
+  function getActiveProse(n) {
+    const arr = getSegArray(n);
+    if (!arr.length) return "（正在按需载入该幕正文数据包……）";
+    let base = "";
+    if (curStep === 0) {
+      base = arr.join("\n\n");
+    } else {
+      const idx = Math.max(0, Math.min(arr.length - 1, curStep - 1));
+      base = arr[idx] || "";
+    }
+
+    const bucket = getSceneBucket(n.location);
+    if (curMode === "free") {
+      const roleObj = getFreeRoleById(curFreeRole);
+      if (roleObj && roleObj.hooks) {
+        const hookTxt = roleObj.hooks[bucket] || roleObj.hooks.penthouse;
+        base = base.replace(/\s+$/, "") + "\n\n" + hookTxt;
+      }
+    } else if (curMode === "male") {
+      if (curMaleRole === "supreme") {
+        const nm = cleanSingleLine(maleName);
+        if (nm) {
+          base = base.replace(/那位手握最高VIP权限的先生/g, "手握最高VIP权限的" + nm);
+        }
+        if (stripQuoted(base).indexOf("你") < 0) {
+          let mHook = MALE_SUPREME_NODE_HOOKS[n.code] || MALE_SUPREME_SCENE_HOOKS[bucket] || MALE_SUPREME_SCENE_HOOKS.penthouse;
+          if (nm) mHook = mHook.replace(/的你/, "的" + nm + "（你）");
+          base = base.replace(/\s+$/, "") + "\n\n" + mHook;
+        }
+      } else {
+        const flexHook = buildFlexMaleHook(n, bucket);
+        base = base.replace(/\s+$/, "") + "\n\n" + flexHook;
+      }
+    }
+    return base;
+  }
+
+  function getPovShort() {
+    if (curMode === "female") {
+      const fName = cleanSingleLine(femName);
+      const idLabel = curFemMode === "custom" ? (fName ? ("自定·" + fName) : "自定义女主") : "伊芸";
+      return "女主(" + idLabel + ") · " + (curFemPov === "first" ? "第一人称" : "第二人称") + (curNpc === "erase" ? "·净" : "");
+    }
+    if (curMode === "male") {
+      const mr = getMaleRoleById(curMaleRole);
+      const mName = cleanSingleLine(maleName);
+      return "男主 · " + mr.name + (mName ? ("(" + mName + ")") : "");
+    }
+    const r = getFreeRoleById(curFreeRole);
+    return (r && r.id !== "custom" ? ("第三人称 · " + r.name) : "第三人称 · 自由") + (curNpc === "erase" ? "·净" : "");
+  }
+
+  function renderRoleGrid() {
+    const grid = document.getElementById("roleGrid");
+    grid.innerHTML = "";
+    PRESET_ROLES.forEach(function(r) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "r-pill" + (curFreeRole === r.id ? " active" : "");
+      btn.textContent = r.icon + " " + r.name;
+      btn.title = r.short;
+      btn.addEventListener("click", function() {
+        curFreeRole = r.id;
+        saveStash();
+        renderRoleGrid();
+        renderDetail(false);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function renderMaleRoleGrid() {
+    const grid = document.getElementById("maleRoleGrid");
+    grid.innerHTML = "";
+    const curObj = getMaleRoleById(curMaleRole);
+    document.getElementById("maleRoleHint").textContent = curObj.hint;
+    MALE_ROLES.forEach(function(r) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "r-pill" + (curMaleRole === r.id ? " active" : "");
+      btn.textContent = r.icon + " " + r.name;
+      btn.title = r.short;
+      btn.addEventListener("click", function() {
+        curMaleRole = r.id;
+        saveStash();
+        renderMaleRoleGrid();
+        renderList();
+        renderDetail(false);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function detectBadges(n) {
+    const m = getNodeMeta(n);
+    const bag = m.short_title + " " + m.plot_detail + " " + (m.char_keys || Object.keys(n.active_characters || {})).join(" ");
+    const out = [];
+    if (bag.indexOf("希蓉") >= 0) out.push({ cls: "xi", txt: "希" });
+    if (bag.indexOf("露露") >= 0) out.push({ cls: "lulu", txt: "露" });
+    if (bag.indexOf("燕芝") >= 0) out.push({ cls: "yan", txt: "燕" });
+    if (bag.indexOf("张雁") >= 0) out.push({ cls: "zhang", txt: "雁" });
+    if (curXcast === "full" && bag.indexOf("琪琪") >= 0) out.push({ cls: "qi", txt: "琪" });
+    if (curXcast === "full" && (bag.indexOf("欣然") >= 0 || bag.indexOf("孜然") >= 0)) out.push({ cls: "cheng", txt: "程" });
+    if ((curMode === "free" || curMode === "female") && curNpc === "keep" && (bag.indexOf("李德") >= 0 || bag.indexOf("昊鹏") >= 0 || bag.indexOf("高城") >= 0)) {
+      out.push({ cls: "app", txt: "伴" });
+    }
+    return out;
+  }
+
+  function selectNodeOrSwitchArc(targetNode, nextArcFilter) {
+    const stepForTarget = curStep === 0 ? 0 : 1;
+    if (!PACK_BY_ID[targetNode.id]) {
+      switchArcPack(targetNode.arc_id, nextArcFilter, targetNode.id, stepForTarget);
+      return;
+    }
+    curArc = nextArcFilter;
+    selectedId = targetNode.id;
+    curStep = stepForTarget;
+    renderArcPills();
+    renderList();
+    renderDetail(true);
+  }
+
+  function renderArcPills() {
+    const box = document.getElementById("arcPills");
+    box.innerHTML = "";
+    const counts = { all: CATALOG.length };
+    const order = ["all"];
+    CATALOG.forEach(function(n) {
+      if (!counts[n.arc_id]) {
+        counts[n.arc_id] = 0;
+        order.push(n.arc_id);
+      }
+      counts[n.arc_id] += 1;
+    });
+
+    order.forEach(function(aid) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      const isEaster = aid === "act6_alien_easter";
+      btn.className = "a-pill" + (isEaster ? " easter" : "") + (curArc === aid ? " active" : "");
+      btn.textContent = aid === "all" ? ("全部 (" + counts.all + ")") : (ARC_SHORT[aid] || aid);
+      btn.addEventListener("click", function() {
+        if (aid === "all") {
+          curArc = "all";
+          renderArcPills();
+          renderList();
+          return;
+        }
+        const arcNodes = CATALOG.filter(function(x) { return x.arc_id === aid; });
+        const keepCur = arcNodes.some(function(x) { return x.id === selectedId; });
+        const target = keepCur ? CATALOG[selectedId] : arcNodes[0];
+        if (target) {
+          selectNodeOrSwitchArc(target, aid);
+        }
+      });
+      box.appendChild(btn);
+    });
+  }
+
+  function getFiltered() {
+    return CATALOG.filter(function(n) {
+      if (curArc !== "all" && n.arc_id !== curArc) return false;
+      if (!curSearch) return true;
+      const m = getNodeMeta(n);
+      const evStr = (m.events || []).join(" ");
+      const ckStr = (m.char_keys || Object.keys(n.active_characters || {})).join(" ");
+      const hay = (n.code + " " + m.short_title + " " + n.location + " " + n.subtitle + " " + m.plot_detail + " " + evStr + " " + ckStr).toLowerCase();
+      return hay.indexOf(curSearch.toLowerCase()) >= 0;
+    });
+  }
+
+  function renderList() {
+    const box = document.getElementById("nodeList");
+    box.innerHTML = "";
+    getFiltered().forEach(function(n) {
+      const m = getNodeMeta(n);
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "nl-item" + (n.id === selectedId ? " active" : "");
+
+      const r1 = document.createElement("div");
+      r1.className = "nl-r1";
+      const cSpan = document.createElement("span");
+      cSpan.className = "nl-code";
+      cSpan.textContent = n.code;
+      const sSpan = document.createElement("span");
+      sSpan.className = "nl-sec";
+      sSpan.textContent = n.subtitle;
+      r1.appendChild(cSpan);
+      r1.appendChild(sSpan);
+
+      const tDiv = document.createElement("div");
+      tDiv.className = "nl-title";
+      tDiv.textContent = viewText(m.short_title);
+
+      const mDiv = document.createElement("div");
+      mDiv.className = "nl-meta";
+      const lSpan = document.createElement("span");
+      lSpan.className = "nl-loc";
+      lSpan.textContent = m.location || n.location;
+      const tagWrap = document.createElement("span");
+      tagWrap.className = "nl-tags";
+      detectBadges(n).forEach(function(tg) {
+        const d = document.createElement("span");
+        d.className = "c-dot " + tg.cls;
+        d.textContent = tg.txt;
+        tagWrap.appendChild(d);
+      });
+      mDiv.appendChild(lSpan);
+      mDiv.appendChild(tagWrap);
+
+      item.appendChild(r1);
+      item.appendChild(tDiv);
+      item.appendChild(mDiv);
+
+      item.addEventListener("click", function() {
+        selectNodeOrSwitchArc(n, curArc);
+      });
+      box.appendChild(item);
+    });
+  }
+
+  function renderDetail(resetScroll) {
+    const n = CATALOG[selectedId] || CATALOG[0];
+    const m = getNodeMeta(n);
+    const kCount = getStepCount(n);
+    if (curStep > kCount) curStep = kCount;
+
+    document.getElementById("dpTitle").textContent = n.code + " · " + viewText(m.short_title);
+
+    const activeLoc = m.location || n.location;
+    const elLoc = document.getElementById("dpLoc");
+    elLoc.textContent = "📍 " + activeLoc;
+    elLoc.title = activeLoc + "（" + viewText(m.yi_stage) + "）";
+
+    const eqStr = viewText(m.yi_equipment);
+    const elEq = document.getElementById("dpEquip");
+    elEq.textContent = "👗 " + eqStr;
+    elEq.title = eqStr;
+
+    const castKeys = (m.char_keys || Object.keys(n.active_characters || {})).map(function(ck) {
+      return (curMode === "female" && curFemMode === "custom" && cleanSingleLine(femName))
+        ? swapHeroineName(ck, femName)
+        : ck;
+    });
+    const elCast = document.getElementById("dpCast");
+    if (castKeys.length > 0) {
+      elCast.style.display = "";
+      elCast.textContent = "👥 " + castKeys.join(" · ");
+      elCast.title = viewText(m.yi_mental);
+    } else {
+      elCast.style.display = "none";
+    }
+
+    const cnNum = kCount === 4 ? "四" : (kCount === 3 ? "三" : String(kCount));
+    const fullBtn = document.getElementById("fullNodeBtn");
+    fullBtn.classList.toggle("active", curStep === 0);
+    fullBtn.textContent = (curStep === 0 ? "✓ " : "") + cnNum + "段连读";
+
+    const stepsBox = document.getElementById("seqSteps");
+    stepsBox.innerHTML = "";
+    (m.events || []).forEach(function(ev, i) {
+      const stepIdx = i + 1;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "s-step" + (curStep === stepIdx ? " active" : (curStep === 0 ? " joined" : ""));
+      const evClean = viewText(ev);
+      btn.title = evClean;
+
+      const topRow = document.createElement("div");
+      topRow.className = "ss-top";
+
+      const num = document.createElement("span");
+      num.className = "ss-num";
+      num.textContent = n.code + "." + stepIdx;
+      topRow.appendChild(num);
+
+      if (curStep === stepIdx) {
+        const bdg = document.createElement("span");
+        bdg.className = "ss-badge";
+        bdg.textContent = "当前";
+        topRow.appendChild(bdg);
+      }
+
+      const txt = document.createElement("div");
+      txt.className = "ss-txt";
+      txt.textContent = evClean;
+
+      btn.appendChild(topRow);
+      btn.appendChild(txt);
+      btn.addEventListener("click", function() {
+        curStep = stepIdx;
+        renderDetail(true);
+      });
+      stepsBox.appendChild(btn);
+    });
+
+    const labelCode = curStep === 0 ? (n.code + " 全节") : (n.code + "." + curStep);
+    document.getElementById("lrTitle").textContent = "📖 " + labelCode;
+    document.getElementById("lrPov").textContent = getPovShort();
+
+    const pBtn = document.getElementById("prefToggleBtn");
+    pBtn.classList.toggle("hidden", curStep === 0);
+    pBtn.classList.toggle("active", showPref);
+    pBtn.textContent = showPref ? "✓ 前情" : "+ 前情";
+
+    const prefStr = getActivePreface(n);
+    const bodyStr = getActiveProse(n);
+    const prefBox = document.getElementById("lrPref");
+    if (curStep > 0 && prefStr) {
+      prefBox.classList.remove("hidden");
+      prefBox.innerHTML = "";
+      const kSpan = document.createElement("span");
+      kSpan.className = "lr-pref-k";
+      kSpan.textContent = "前情提要";
+      prefBox.appendChild(kSpan);
+      prefBox.appendChild(document.createTextNode(prefStr));
+      document.getElementById("lrLen").textContent = (prefStr.length + bodyStr.length) + " 字";
+    } else {
+      prefBox.classList.add("hidden");
+      document.getElementById("lrLen").textContent = bodyStr.length + " 字";
+    }
+
+    document.getElementById("lrBody").textContent = bodyStr;
+    if (resetScroll) {
+      document.getElementById("lrScroll").scrollTop = 0;
+    }
+
+    const povShort = getPovShort();
+    document.getElementById("dockMsg").textContent = labelCode + " · " + viewText(m.short_title) + " ｜ " + povShort;
+    document.getElementById("goBtn").textContent = "进入 " + labelCode + " 开局 ▶";
+  }
+
+  function syncToolbarState() {
+    document.querySelectorAll(".m-card").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-mode") === curMode);
+    });
+    document.querySelectorAll(".n-btn[data-npc]").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-npc") === curNpc);
+    });
+    document.querySelectorAll(".fem-pov-btn").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-fempov") === curFemPov);
+    });
+    document.querySelectorAll(".fem-mode-btn").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-femmode") === curFemMode);
+    });
+    document.querySelectorAll(".xcast-btn").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-xcast") === curXcast);
+    });
+    document.getElementById("freeBar").classList.toggle("hidden", curMode !== "free");
+    document.getElementById("maleBar").classList.toggle("hidden", curMode !== "male");
+    document.getElementById("femBar").classList.toggle("hidden", curMode !== "female");
+    document.getElementById("femCustomBox").classList.toggle("hidden", curMode !== "female" || curFemMode !== "custom");
+  }
+
+  document.getElementById("prefToggleBtn").addEventListener("click", function() {
+    showPref = !showPref;
+    renderDetail(false);
+  });
+
+  document.getElementById("fullNodeBtn").addEventListener("click", function() {
+    curStep = curStep === 0 ? 1 : 0;
+    renderDetail(true);
+  });
+
+  document.querySelectorAll(".m-card").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      curMode = btn.getAttribute("data-mode") || "free";
+      syncToolbarState();
+      renderArcPills();
+      renderList();
+      renderDetail(false);
+    });
+  });
+
+  document.querySelectorAll(".n-btn[data-npc]").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      curNpc = btn.getAttribute("data-npc") || "keep";
+      syncToolbarState();
+      renderList();
+      renderDetail(false);
+    });
+  });
+
+  document.querySelectorAll(".fem-pov-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      curFemPov = btn.getAttribute("data-fempov") || "second";
+      syncToolbarState();
+      renderDetail(false);
+    });
+  });
+
+  document.querySelectorAll(".fem-mode-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      curFemMode = btn.getAttribute("data-femmode") === "custom" ? "custom" : "canon";
+      syncToolbarState();
+      renderList();
+      renderDetail(false);
+    });
+  });
+
+  document.getElementById("maleNameIn").addEventListener("input", function(e) {
+    maleName = e.target.value || "";
+    saveStash();
+    renderDetail(false);
+  });
+  document.getElementById("maleBioIn").addEventListener("input", function(e) {
+    maleBio = e.target.value || "";
+    saveStash();
+    renderDetail(false);
+  });
+  document.querySelectorAll(".male-preset-pill").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      maleName = btn.getAttribute("data-mname") || "";
+      maleBio = btn.getAttribute("data-mbio") || "";
+      document.getElementById("maleNameIn").value = maleName;
+      document.getElementById("maleBioIn").value = maleBio;
+      saveStash();
+      renderDetail(false);
+    });
+  });
+  document.getElementById("clearMaleCustomBtn").addEventListener("click", function() {
+    maleName = "";
+    maleBio = "";
+    document.getElementById("maleNameIn").value = "";
+    document.getElementById("maleBioIn").value = "";
+    saveStash();
+    renderDetail(false);
+  });
+
+  document.getElementById("femNameIn").addEventListener("input", function(e) {
+    femName = e.target.value || "";
+    saveStash();
+    renderList();
+    renderDetail(false);
+  });
+  document.getElementById("femBioIn").addEventListener("input", function(e) {
+    femBio = e.target.value || "";
+    saveStash();
+    renderDetail(false);
+  });
+  document.querySelectorAll(".fem-preset-pill").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      femName = btn.getAttribute("data-fname") || "";
+      femBio = btn.getAttribute("data-fbio") || "";
+      document.getElementById("femNameIn").value = femName;
+      document.getElementById("femBioIn").value = femBio;
+      saveStash();
+      renderList();
+      renderDetail(false);
+    });
+  });
+  document.getElementById("clearFemCustomBtn").addEventListener("click", function() {
+    femName = "";
+    femBio = "";
+    document.getElementById("femNameIn").value = "";
+    document.getElementById("femBioIn").value = "";
+    saveStash();
+    renderList();
+    renderDetail(false);
+  });
+
+  document.querySelectorAll(".xcast-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      curXcast = btn.getAttribute("data-xcast") || "solo";
+      syncToolbarState();
+      renderList();
+      renderDetail(false);
+    });
+  });
+
+  document.getElementById("searchIn").addEventListener("input", function(e) {
+    curSearch = (e.target.value || "").trim();
+    saveStash();
+    renderList();
+  });
+
+  document.getElementById("prevBtn").addEventListener("click", function() {
+    if (selectedId > 0) {
+      const target = CATALOG[selectedId - 1];
+      const nextFilter = (curArc !== "all" && curArc !== target.arc_id) ? target.arc_id : curArc;
+      selectNodeOrSwitchArc(target, nextFilter);
+    }
+  });
+
+  document.getElementById("nextBtn").addEventListener("click", function() {
+    if (selectedId + 1 < CATALOG.length) {
+      const target = CATALOG[selectedId + 1];
+      const nextFilter = (curArc !== "all" && curArc !== target.arc_id) ? target.arc_id : curArc;
+      selectNodeOrSwitchArc(target, nextFilter);
+    }
+  });
+
+  (function initPreviewDrag() {
+    const sc = document.getElementById("lrScroll");
+    const rz = document.getElementById("lrResizer");
+    const nl = document.getElementById("nodeList");
+
+    [sc, nl].forEach(function(el) {
+      el.addEventListener("touchmove", function(ev) {
+        ev.stopPropagation();
+      }, { passive: true });
+    });
+
+    let isDown = false;
+    let isDragging = false;
+    let startY = 0;
+    let startTop = 0;
+    let activePid = -1;
+
+    sc.addEventListener("pointerdown", function(e) {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      const rect = sc.getBoundingClientRect();
+      if (e.clientX >= rect.left + sc.clientWidth) return;
+      isDown = true;
+      isDragging = false;
+      startY = e.clientY;
+      startTop = sc.scrollTop;
+      activePid = e.pointerId;
+    });
+
+    sc.addEventListener("pointermove", function(e) {
+      if (!isDown || e.pointerId !== activePid) return;
+      const dy = e.clientY - startY;
+      if (!isDragging && Math.abs(dy) > 4) {
+        isDragging = true;
+        sc.classList.add("grabbing");
+        try { sc.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      if (isDragging) {
+        e.preventDefault();
+        sc.scrollTop = startTop - dy;
+      }
+    });
+
+    function endGrab() {
+      if (!isDown) return;
+      if (isDragging && activePid >= 0) {
+        try { sc.releasePointerCapture(activePid); } catch (err) {}
+      }
+      isDown = false;
+      isDragging = false;
+      activePid = -1;
+      sc.classList.remove("grabbing");
+    }
+    sc.addEventListener("pointerup", endGrab);
+    sc.addEventListener("pointercancel", endGrab);
+    sc.addEventListener("lostpointercapture", endGrab);
+    window.addEventListener("pointerup", endGrab);
+    window.addEventListener("blur", endGrab);
+
+    let rzActive = false;
+    let rzStartY = 0;
+    let rzStartH = 0;
+    let rzPid = -1;
+
+    rz.addEventListener("pointerdown", function(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      e.preventDefault();
+      rzActive = true;
+      rzStartY = e.clientY;
+      rzStartH = sc.getBoundingClientRect().height;
+      rzPid = e.pointerId;
+      rz.classList.add("dragging");
+      try { rz.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    rz.addEventListener("pointermove", function(e) {
+      if (!rzActive || e.pointerId !== rzPid) return;
+      e.preventDefault();
+      const nextH = Math.max(150, Math.min(720, Math.round(rzStartH + (e.clientY - rzStartY))));
+      sc.style.height = nextH + "px";
+    });
+
+    function endResize() {
+      if (!rzActive) return;
+      if (rzPid >= 0) {
+        try { rz.releasePointerCapture(rzPid); } catch (err) {}
+      }
+      rzActive = false;
+      rzPid = -1;
+      rz.classList.remove("dragging");
+      saveStash();
+    }
+    rz.addEventListener("pointerup", endResize);
+    rz.addEventListener("pointercancel", endResize);
+    rz.addEventListener("lostpointercapture", endResize);
+  })();
+
+  function buildOpeningMessage(n) {
+    const m = getNodeMeta(n);
+    let npcPolicy = curNpc;
+    if (curMode === "male") {
+      npcPolicy = curMaleRole === "supreme" ? "male" : "male_flex";
+    }
+    let activeRole = curFreeRole;
+    if (curMode === "male") {
+      activeRole = curMaleRole;
+    } else if (curMode === "female") {
+      activeRole = curFemMode === "custom" ? "custom_fem" : "yiyun";
+    }
+    const femModeVal = curMode === "female" ? curFemMode : "none";
+    const mName = cleanSingleLine(maleName);
+    const mBio = cleanSingleLine(maleBio);
+    const fName = cleanSingleLine(femName);
+    const fBio = cleanSingleLine(femBio);
+    const protagNameVal = curMode === "male" ? (mName || "默认") : (curMode === "female" && curFemMode === "custom" ? (fName || "自定义女主") : "默认");
+    const protagBioVal = curMode === "male" ? (mBio || "默认") : (curMode === "female" && curFemMode === "custom" ? (fBio || "玩家自定义女主设定") : "默认");
+
+    const roleObj = getFreeRoleById(curFreeRole);
+    const maleRoleObj = getMaleRoleById(curMaleRole);
+    const note = (document.getElementById("customNote").value || "").trim();
+    const L = String.fromCharCode(60);
+    const G = String.fromCharCode(62);
+    const NS = "LULU_";
+
+    let povAnchor = "";
+    if (curMode === "female") {
+      const eraseFemNote = npcPolicy === "erase"
+        ? "本局同时启用【全女角纯净舞台】：全场互动聚焦女主、露露、燕芝、张雁及已入局随行女伴。\n"
+        : "";
+      if (curFemMode === "custom") {
+        const dispName = fName || "自定义女主";
+        const dispBio = fBio || "玩家自定义年轻精英女性人设（按备注与上下文自然展开）";
+        povAnchor =
+          "【视角与自定义女主最高覆写锚点】本局玩家启用『自定义女主』模式直接扮演女主人公「" + dispName + "」（第0楼" + (curFemPov === "first" ? "第一人称「我」" : "第二人称「你」") + "即玩家本人）！\n" +
+          "· 自定义女主姓名：" + dispName + "\n" +
+          "· 自定义外貌与人设：" + dispBio + "\n" +
+          "· 覆写铁律：原著『伊芸』的姓名及冲突外貌设定已被彻底屏蔽替换！后续回复一律以沉浸式第二人称「你」向玩家呈现感官与互动，露露、燕芝、张雁、希蓉等全体NPC均自始至终以「" + dispName + "」及对应身份称呼你，严禁再冒出『伊芸 / 小芸』旧名，严禁代写玩家的台词或决定。\n" +
+          eraseFemNote;
+      } else {
+        povAnchor = (curFemPov === "first"
+          ? "【视角与人称锚点】本局玩家直接扮演原著女主「伊芸」（第0楼第一人称「我」即玩家本人）。后续回复请以第二人称「你」向玩家呈现感官体验与周围人物互动，严禁代写玩家的台词或决定。\n"
+          : "【视角与人称锚点】本局玩家直接扮演原著女主「伊芸」（第0楼第二人称「你」即玩家本人）。后续回复请继续以第二人称「你」细腻呈现环境反馈与人物对手戏，严禁代写玩家的言行。\n") + eraseFemNote;
+      }
+    } else if (curMode === "male") {
+      const mCustomLine = (mName || mBio)
+        ? ("· 玩家自定义男主设定：" + (mName ? ("姓名「" + mName + "」；") : "") + (mBio ? ("人设「" + mBio + "」") : "") + "（优先级高于默认泛称，请让露露与在场女角自然贴合该姓名与身份互动）。\n")
+        : "";
+      povAnchor =
+        "【视角与男主路线锚点】本局为男主当场互动视角（第二人称「你」指代男主玩家，伊芸及露露、燕芝、张雁、希蓉等全体女角一律使用第三人称细致刻画外貌神态；全场无任何其他男性情敌，且「你」全程亲临第一现场面对面互动，绝不异地看监控）。\n" +
+        "· 当前选定男主路线：" + maleRoleObj.dossier + "\n" +
+        mCustomLine;
+    } else {
+      const rInfo = (roleObj && roleObj.id !== "custom") ? ("玩家当前预设身份为「" + roleObj.name + "」——" + roleObj.dossier + "\n") : "";
+      const npcInfo = npcPolicy === "erase"
+        ? "本局已启用【全女角纯净舞台】：舞台聚焦伊芸、露露、燕芝、张雁及任何已入局同行的跨线或自拟女伴，且燕芝、张雁等女配所持有的副机权限同样可被截胡反转、与伊芸一同收服随行。\n"
+        : "";
+      povAnchor = "【视角与人称锚点】本局为第三人称都市沙盒介入模式：女主伊芸及所有NPC一律使用第三人称（「伊芸 / 她」）客观描写，以第二人称「你」指代玩家角色，切勿将伊芸与玩家混淆。\n" + rInfo + npcInfo;
+    }
+
+    const evs = (m.events || n.events || []).map(viewText);
+    const kCount = evs.length || 3;
+    const statusStep = curStep === 0 ? kCount : curStep;
+
+    let stepAnchor = "";
+    if (curStep === 0) {
+      stepAnchor = "【当前子段切入锚点】玩家选择了「" + n.code + " 全节连读」开局，请紧贴本节末尾现场承接后续互动。\n";
+    } else {
+      const curEv = evs[curStep - 1] || "";
+      const doneArr = evs.slice(0, curStep - 1).map(function(x, idx) { return n.code + "." + (idx + 1) + "（" + x + "）"; });
+      const remArr = evs.slice(curStep).map(function(x, idx) { return n.code + "." + (curStep + idx + 1) + "（" + x + "）"; });
+      stepAnchor =
+        "【当前子段切入锚点】" +
+        (doneArr.length ? ("本节前序子段 " + doneArr.join("、") + " 已作为前情发生完毕；") : "") +
+        "玩家当前从子段「" + n.code + "." + curStep + "」（" + curEv + "）切入开局。" +
+        (remArr.length
+          ? ("本节后续子段 " + remArr.join(" → ") + " 尚未发生，请紧贴当前子段末尾现场细腻承接互动，循序渐进推演，切勿单轮跳完。\n")
+          : "当前为本节收尾子段，请紧贴末尾现场充分展开对手戏与余韵，未收到【阶段推进确认】前切勿擅自跨入下一节点。\n");
+    }
+
+    let xcastAnchor = "";
+    if (n.code.indexOf("X") === 0 || (note && note.indexOf("希蓉") >= 0)) {
+      xcastAnchor = curXcast === "solo"
+        ? "【星使彩蛋阵容策略：仅保留希蓉（精简人数模式）】跨书彩蛋支线人物仅限阿斯兰蒂公使「希蓉」一人登场（不自动刷出其他未点名彩蛋配角，主线女角与玩家引入角色正常保留），且希蓉一旦入局，后续跨幕推进须全程合理随行同场，严禁切幕清退。\n"
+        : "【星使彩蛋阵容策略：全彩蛋阵容】除异星公使「希蓉」外，可按场景自然联动当红旗袍女歌星「琪琪」、粉裙学姐「程欣然」与电子社少女「程孜然」，全员支持子母副端同调且入局后跨幕全程随行不断档。\n";
+    }
+
+    let initCompanions = "无";
+    if (n.code.indexOf("X") === 0) {
+      if (curXcast === "full") {
+        const extraNames = ["希蓉"];
+        const cks = (m.char_keys || []).join(" ");
+        ["琪琪", "程欣然", "程孜然"].forEach(function(nm) {
+          if (cks.indexOf(nm) >= 0 && extraNames.indexOf(nm) < 0) extraNames.push(nm);
+        });
+        initCompanions = extraNames.join("、") + "（同场随行·子母副端联动）";
+      } else {
+        initCompanions = "希蓉（阿斯兰蒂公使·二号副耳钉同场随行）";
+      }
+    } else if (note && note.indexOf("希蓉") >= 0) {
+      initCompanions = "希蓉（阿斯兰蒂公使·二号副耳钉同场随行）";
+    }
+
+    const hidden =
+      L + 'div style="display' + ':none"' + G + "\n" +
+      "【开局阶段" + "触发键】\n" +
+      OB + OB + NS + "OPENING:" + n.code + CB + CB + "\n" +
+      OB + OB + NS + "STAGE:" + n.code + CB + CB + "\n" +
+      OB + OB + NS + "STEP:" + statusStep + CB + CB + "\n" +
+      OB + OB + NS + "VIEW:" + curMode + CB + CB + "\n" +
+      OB + OB + NS + "NPC:" + npcPolicy + CB + CB + "\n" +
+      OB + OB + NS + "ROLE:" + activeRole + CB + CB + "\n" +
+      OB + OB + NS + "FEM:" + femModeVal + CB + CB + "\n" +
+      OB + OB + NS + "XCAST:" + curXcast + CB + CB + "\n" +
+      povAnchor +
+      xcastAnchor +
+      stepAnchor +
+      (note ? "【玩家自定义补充备注】\n" + note + "\n" : "") +
+      "【/开局阶段" + "触发键】\n" +
+      L + "/div" + G + "\n\n";
+
+    const prefStr = getActivePreface(n);
+    const proseBlock = (curStep > 0 && prefStr)
+      ? (G + " **【前情提要】** " + prefStr + "\n\n" + getActiveProse(n))
+      : getActiveProse(n);
+
+    const activeLoc = m.location || n.location;
+    const sOpen = OB + NS + "STATUS" + CB;
+    const sClose = OB + "/" + NS + "STATUS" + CB;
+    const status =
+      "\n\n" + sOpen + "\n" +
+      "stage: " + n.code + "\n" +
+      "step: " + statusStep + "\n" +
+      "stage_title: " + viewText(m.short_title) + "\n" +
+      "location: " + activeLoc + "\n" +
+      "attire_state: " + viewText(m.yi_equipment) + "\n" +
+      "bond_mental: " + viewText(m.yi_mental) + "\n" +
+      "companions: " + initCompanions + "\n" +
+      "stage_key: " + OB + OB + NS + "STAGE:" + n.code + CB + CB + "\n" +
+      "opening_key: " + OB + OB + NS + "OPENING:" + n.code + CB + CB + "\n" +
+      "view: " + curMode + "\n" +
+      "view_key: " + OB + OB + NS + "VIEW:" + curMode + CB + CB + "\n" +
+      "role: " + activeRole + "\n" +
+      "role_key: " + OB + OB + NS + "ROLE:" + activeRole + CB + CB + "\n" +
+      "fem_mode: " + femModeVal + "\n" +
+      "fem_key: " + OB + OB + NS + "FEM:" + femModeVal + CB + CB + "\n" +
+      "protag_name: " + protagNameVal + "\n" +
+      "protag_bio: " + protagBioVal + "\n" +
+      "npc_policy: " + npcPolicy + "\n" +
+      "npc_key: " + OB + OB + NS + "NPC:" + npcPolicy + CB + CB + "\n" +
+      "xcast: " + curXcast + "\n" +
+      "xcast_key: " + OB + OB + NS + "XCAST:" + curXcast + CB + CB + "\n" +
+      "next_stage: " + (n.next_code || "") + "\n" +
+      "next_title: " + viewText(m.next_title || "") + "\n" +
+      "advance_id: " + (n.next_code ? n.code + "_TO_" + n.next_code : "") + "\n" +
+      "can_advance: " + (n.next_code ? "true" : "false") + "\n" +
+      sClose;
+
+    return hidden + proseBlock + status;
+  }
+
+  document.getElementById("goBtn").addEventListener("click", async function() {
+    const n = CATALOG[selectedId] || CATALOG[0];
+    if (!PACK_BY_ID[n.id]) {
+      await switchArcPack(n.arc_id, curArc, n.id, curStep);
+      return;
+    }
+    const msg = buildOpeningMessage(n);
+    try { if (window.parent) window.parent.__luluPanelStash = null; } catch (e) {}
+    const info = document.getElementById("dockMsg");
+    const label = curStep === 0 ? n.code : (n.code + "." + curStep);
+    try {
+      if (typeof setChatMessages === "function") {
+        await setChatMessages([{ message_id: 0, message: msg }]);
+        info.textContent = "✓ 已载入 " + label + " 开局";
+        return;
+      }
+      const p = window.parent;
+      if (p && typeof p.setChatMessages === "function") {
+        await p.setChatMessages([{ message_id: 0, message: msg }]);
+        info.textContent = "✓ 已载入 " + label + " 开局";
+        return;
+      }
+      if (p && p.SillyTavern && typeof p.SillyTavern.getContext === "function") {
+        const ctx = p.SillyTavern.getContext();
+        if (ctx && Array.isArray(ctx.chat) && ctx.chat.length > 0) {
+          ctx.chat[0].mes = msg;
+          if (typeof ctx.saveChat === "function") await ctx.saveChat();
+          if (typeof ctx.reloadCurrentChat === "function") await ctx.reloadCurrentChat();
+          info.textContent = "✓ 已切换至 " + label;
+          return;
+        }
+      }
+      await navigator.clipboard.writeText(msg);
+      info.textContent = "已复制 " + label + " 开局内容至剪贴板";
+    } catch (err) {
+      info.textContent = "提示：" + String(err);
+    }
+  });
+
+  restoreStash();
+  syncToolbarState();
+  renderRoleGrid();
+  renderMaleRoleGrid();
+  renderArcPills();
+  renderList();
+  renderDetail(true);
 })();
 </script>
 </body>
 </html>
-```
