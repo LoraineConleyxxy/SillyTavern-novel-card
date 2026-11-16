@@ -1,16 +1,16 @@
 ---
 name: sillytavern-pixiv-card
-description: Build or upgrade Pixiv novel SillyTavern V2/V3 character cards (v3.9+ card-specific architecture). Use when the user asks to create, refactor, or upgrade a Pixiv character card (角色卡/酒馆卡), extract 100% full-novel sub-openings (开局), build nested-regex per-act packs (正则套正则), add female companion co-submissive modes (摆法A·女伴同受调教/双姝共受), add multi-archetype male lead routes & custom male/female protagonist name+persona overrides (男主多路线下克上/共犯/自拟 & 女主换名换设定), stitch cross-book Easter-egg arcs with anti-crowding cast toggles (solo/full), preserve introduced or recruited companions across scene transitions (跨幕随行防丢人/切场景保留角色), purify NPC-erased modes, prevent CoT status-bar regex collisions, enhance co-tamable female supporting cast, or deploy cards to SillyTavern servers (archiving prior versions locally while keeping only the latest version on the server).
+description: Build or upgrade Pixiv novel SillyTavern V2/V3 character cards (v3.10+ card-specific architecture). Use when the user asks to create, refactor, or upgrade a Pixiv character card (角色卡/酒馆卡), extract 100% full-novel sub-openings (开局), build nested-regex per-act packs (正则套正则), add female companion co-submissive modes (摆法A·女伴同受调教/双姝共受), add multi-archetype male lead routes & custom male/female protagonist name+persona overrides (男主多路线下克上/共犯/自拟 & 女主换名换设定), add Futa-Yuri stage transformation (扶她百合·其他男角替换为扶她女角 `npc_policy: futa`), stitch cross-book Easter-egg arcs with anti-crowding cast toggles (solo/full), preserve introduced or recruited companions across scene transitions (跨幕随行防丢人/切场景保留角色), purify NPC-erased modes, prevent CoT status-bar regex collisions, enhance co-tamable female supporting cast, or deploy cards to SillyTavern servers (archiving prior versions locally while keeping only the latest version on the server).
 metadata:
-  version: "3.9.1"
+  version: "3.10.0"
 ---
 
-# SillyTavern Pixiv Card Maker & Upgrader (v3.9.1 Card-Specific Architecture)
+# SillyTavern Pixiv Card Maker & Upgrader (v3.10.0 Card-Specific Architecture)
 
 > **Guiding Principle — 一张卡一个策略，Skill 只是辅助底盘**:
 > Every novel has its own narrative perspective (1st-person vs 3rd-person), world mechanics (cybernetic devices vs abyssal/temple magic constructs), visual aesthetic, and fetish appeal. **Never mechanically clone another card's UI color palette, base POV, or mode switches.** Audit each novel's specific strengths first, preserve its bespoke visual identity (e.g., Dark-Gold Obsidian `#110f0d/#c9a84c` for dark fantasy vs Cyan-Mint for sci-fi), and activate only the mode extensions that genuinely elevate that work.
 
-Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTavern V2/V3 character card (`v3.9.1` Architecture)** combining universal reliability invariants with tailored per-card gameplay strategies:
+Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTavern V2/V3 character card (`v3.10.0` Architecture)** combining universal reliability invariants with tailored per-card gameplay strategies:
 
 1. **Local Archive + Server Latest-Only Versioning Discipline (`本地保留历史版本，服务器只保留最新版`)**:
    - **Local Workspace (`历史版本/v<旧版本号>/`)**: Never overwrite prior local release files unless explicitly instructed — before building a new version, archive all prior card PNG/JSON, standalone worldbook JSON, node outlines, and `源码/` snapshots into `历史版本/v<旧版本号>/` locally, and output the newly bumped `<卡名>_v<新版本号>.png` & `<卡名>_世界书_v<新版本号>.json` in the card root.
@@ -20,26 +20,31 @@ Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTaver
    - **100% Verbatim Novel Coverage Across Sub-Openings (`.1 ~ .5`)**: Every narrative paragraph of the source novel (`100%` coverage, zero dropped tails) is sliced along natural paragraph/quote boundaries into **3–5 clickable ~450–650 char independent sub-openings per node**, each paired with a **~100–130 char mode-aware prior-story preface (`【前情提要】`)**, toggleable preface display, and a full-node continuous reading toggle.
    - **Chained Nested-Regex Architecture (`正则套正则`)**: Splits the lightweight UI shell (`CATALOG` metadata only) from per-act/per-volume prose data packs (`[[<NS>_PACK:<arc_id>]]` → `<nspack>...</nspack>`, using a single canonical base + sparse `"si:pi"` paragraph patches). Only 1 act's pack (~35–270 KB) mounts in the DOM at a time, eliminating frontend lag even on 500,000+ char multi-volume novels. State (`customNote`, search query, reader height) is preserved across pack swaps via `window.parent.__<ns>PanelStash`.
    - **Bespoke Visual Theme + Grab-Scroll & Height Resizer**: Tailor colors/typography to the novel's genre; include mouse grab-to-scroll (`pointerdown`/`pointermove`), mobile `touch-action: pan-y` isolation, and a bottom height drag resizer (`150px–720px`).
-3. **Three Clean Top-Level Modes + Optional "摆法 A" Female Co-Submissive Sub-Stance (`女伴同受调教`)**:
-   - **`1. 第三人称 · 自建入场` (`free`)**: Pure 3rd-person cast narration (`女主名 / 她`) + 2nd-person player (`你`), paired with `⚔️ 原著男配` (`keep` 零免死保留 vs `erase` 零残留净版).
+3. **Three Clean Top-Level Modes + 3-Option Stage Switch (`keep | erase | futa`) + Optional "摆法 A" Female Co-Submissive Sub-Stance (`女伴同受调教`)**:
+   - **Shared 3-Option Stage Roster Switch (`⚔️ 舞台阵容`: `keep | erase | futa`)** across both `free` and `female` modes:
+     - `keep` (`原著阵容`): Preserves canon supporting/antagonist roster as zero-plot-armor background characters.
+     - `erase` (`纯女净版`): 100% pure female cast + arcane/automated mechanisms (zero male characters/pronouns and zero dual-gender anatomical terms).
+     - `futa` (`🌺 扶她百合` — **v3.10+ Futa-Yuri Stage**): 100% female/futanari cast (zero male characters, zero male mob labels, zero standalone `他`), transforming all canon male dominators/rivals/instructors into **18+ alluring futanari women** (`扶她御姐/女官/女导师/宿敌学姐`) while keeping full physical domination tension!
+   - **`1. 第三人称 · 自建入场` (`free`)**: Pure 3rd-person cast narration (`女主名 / 她`) + 2nd-person player (`你`), paired with `⚔️ 舞台阵容` (`keep | erase | futa`).
      - **Standard Sandbox (`stance: sandbox`)**: 5 grounded, zero-privilege everyday passerby presets + `custom` blank self-definition for free observation, interception, rescue, or domination.
      - **Optional Card-Specific Extension — "摆法 A" Female Co-Submissive Stance (`⛓ 女伴同受调教 / 双姝共受`, `stance: cosub`)**: Recommended when the novel revolves around a proud heroine undergoing trials, bondage, or taming! Keeps top-level modes to 3 clean cards while adding an `🎭 入场定位` switch (`[🗡 自由沙盒路人]` vs `[⛓ 女伴同受调教]`) inside `free` mode:
-       - Places `<user>` (`你`) as an **18+ adult female companion** physically bound, tested, humiliated, and tamed **side-by-side with the heroine** in every scene (`4` bespoke companion presets such as `随侍女仆 / 同行修女 / 伴读贵女 / 感官共鸣副印旅者` + `自拟同行女伴`).
-       - Pairs seamlessly with `原著男配`: `cosub + erase` = **Pure Yuri / Arcane-Mechanism Dual-Taming** (canon female dominators or temple/device mechanisms co-tame both heroine and female `你`); `cosub + keep` = **Canon Dominator Dual-Taming** (comparative humiliation & linked sub-locks).
+       - Places `<user>` (`你`) as an **18+ adult female companion** physically bound, tested, humiliated, and tamed **side-by-side with the heroine** in every scene (`4` bespoke companion presets + `自拟同行女伴`).
+       - Pairs seamlessly with all 3 stage options: `cosub + erase` = Pure Yuri / Mechanism Dual-Taming; `cosub + futa` = **Futanari Dominator Dual-Taming (`双姝共侍扶她御姐`)**; `cosub + keep` = Canon Dominator Dual-Taming.
    - **`2. 男主视角 · 当场主控与多路线定制` (`male` — 100% On-Site + Multi-Archetype `maleBar` + Custom Name/Persona)**:
-     - 2nd-person male lead (`你`) + 3rd-person heroine & female cast, all original male NPCs cleared (`npc_policy: male`), and **`你` MUST be physically on-site in the exact room/venue face-to-face with the heroine across 100% of sub-openings** (zero remote CCTV/balcony/window-gazing spectator hooks).
+     - 2nd-person male lead (`你`) + 3rd-person heroine & female cast, all original male NPCs cleared (`npc_policy: male` or `male_flex`), and **`你` MUST be physically on-site in the exact room/venue face-to-face with the heroine across 100% of sub-openings** (zero remote CCTV/balcony/window-gazing spectator hooks).
      - **Never lock `male` mode into a single rigid "suit-wearing omnipotent master" template!** Expose a dedicated `maleBar` sub-toolbar with **4 distinct bespoke on-site male routes + `custom_male` + inline `男主姓名 / 设定补充` inputs (`protag_name` & `protag_bio`)**:
        - `supreme` (`👑 权限主宰`): Classic root-key / master-seal holder commanding the scene from the start; uses `pack.pm` + `n.mm`.
        - `reversal` (`⚡ 下克上·拿捏把柄`), `protector` (`🛡 破局共犯·贴身护卫`), `insider` (`🏠 同居近水楼台`), and `custom_male` (`✨ 完全自拟男主`): Route 0th-floor prose onto the **clean rival-erased 3rd-person base (`pack.pe` + `n.em`)** (so zero forced boss outfits/privileges bleed in!) and append a **role-specific 100%-on-site hook** placing `你` face-to-face with the heroine under that exact dynamic or custom persona.
        - Persist `protag_name` and `protag_bio` inside `[<NS>_STATUS]` and `chatMetadata` so `下一幕 ▶` / `填入跳转 ▶` carries custom male identity across every node.
-   - **`3. 女主视角 · 原著本尊 / 自定义女主覆写` (`female` — `canon | custom` + `keep | erase`)**:
-     - Immersive 2nd-person (`你`) or 1st-person (`我`) toggle + `原著阵容 (keep) | 纯女角净版 (erase)` stage switch + **`[🌸 原著本尊]` (`canon`) vs `[✨ 自定义女主]` (`custom`)** switch inside `femBar`!
+   - **`3. 女主视角 · 原著本尊 / 自定义女主覆写 & 扶她百合` (`female` — `canon | custom` + `keep | erase | futa`)**:
+     - Immersive 2nd-person (`你`) or 1st-person (`我`) toggle + **`原著阵容 (keep) | 纯女净版 (erase) | 🌺 扶她百合 (futa)`** stage switch + **`[🌸 原著本尊]` (`canon`) vs `[✨ 自定义女主]` (`custom`)** switch inside `femBar`!
+     - Selecting `female + futa` enters **Heroine Futa-Yuri Mode (`女主-扶她百合模式`)**: `<user>` plays the heroine (`原著本尊` or `自定义女主`) facing 18+ futanari counterparts (`[[<NS>_NPC:futa]]`) with `pack.pf` + `n.fm` prose & metadata!
      - When `custom` (`[[<NS>_FEM:custom]]`) is selected, expose inline **自定义女主姓名 (`protag_name`) + 自定义外貌与人设 (`protag_bio`)** inputs + quick-fill preset chips:
        - **Live Quote-Inclusive Name Swap**: Replace all canon heroine names & nicknames both outside and **inside dialogue quotes** (`“...”`, `「...」`, `【...】`), prefaces, node titles, and status displays with `protag_name`.
        - **Worldbook Physical Isolation**: Gate the canon heroine's `<character_profile>` (`Order 200`) behind `secondary_keys: ["[[<NS>_VIEW:free]]", "[[<NS>_VIEW:male]]", "[[<NS>_FEM:canon]]"], selective_logic: 0` (`AND_ANY`) so `Order 200` turns **100% OFF** in `female + custom` (zero canon hair/body/backstory bleed-through!), while `[[<NS>_FEM:custom]]` activates a high-priority custom-heroine override entry and persists `protag_name` / `protag_bio` across scene jumps.
 4. **Curated High-Appeal Female Supporting Cast + Co-Taming + Cross-Book Easter-Egg Stitching (`xcast: solo | full`)**:
-   - Prefer canon attractive adult female characters or diegetic arcane/automated mechanisms over random profile-less stand-in names; when minor antagonist slots in huge novels require female counterparts in `erase` mode, give them **distinct feminine names with zero substring overlap** against the original male name (`加扎克` → `葛蕾莎`, NEVER `加扎克雅` which trips substring checks and chained `.replace()` doubling).
-   - Give every female supporting character (including quiet/stoic bodyguards like `黑发剑姬·黯`) a dedicated worldbook profile with 18+ sensual visual details, psychological soft spots, and explicit **co-taming / co-sub hooks** for both `male` and `cosub`/`erase` modes.
+   - Prefer canon attractive adult female characters or diegetic arcane/automated mechanisms over random profile-less stand-in names; when minor antagonist slots in huge novels require female/futanari counterparts in `erase` / `futa` modes, give them **distinct feminine names with zero substring overlap** against the original male name (`加扎克` → `葛蕾莎`, `须乡` → `绯宫凛音`, NEVER `加扎克雅` or `须乡凛` which trip substring checks and chained `.replace()` doubling).
+   - Give every female supporting character (and dedicated `futa` counterpart group gated on `[[<NS>_NPC:futa]]`) a worldbook profile with 18+ visual details, psychological soft spots, and explicit **co-taming / co-sub / futa-yuri hooks**.
    - **Optional Cross-Book Easter-Egg Stitching & Anti-Crowding Cast Switch (`xcast: solo | full`)**: When another short/medium work by the same author (or a sister work) isn't strong enough as a standalone card, stitch its core heroine and 4–5 signature highlight scenes into the main card as a dedicated on-demand Easter-egg pack (`X01~X05`) + main-story encounter hooks (e.g., visiting the rooftop terrace). Always pair multi-character Easter eggs with a **`✦ 彩蛋阵容` switch (`solo` 仅保留核心彩蛋女主精简推荐 vs `full` 全彩蛋女配同台)**:
      - Default to `solo` (`[[<NS>_XCAST:solo]]`), physically gating extra Easter-egg supporting profiles behind `secondary_keys: ["[[<NS>_XCAST:full]]"], selective_logic: 3` (`0` extra tokens in `solo` so the LLM never gets crowded) and mounting sparse `sf`/`p3f`/`pef`/`pmf` patches only when `full` is selected.
      - **Anti-Pink-Elephant Rule**: In `solo` prompts and `solo` `<ns_scene>` entries, **never** list the excluded extra characters' names in negative disclaimers (`不额外自动刷出其他无关彩蛋配角`, NEVER `严禁出现琪琪、程欣然`).
@@ -50,8 +55,8 @@ Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTaver
      2. **Dual-Source Auto-Detection in `status_template.html`**: Combines `getField("companions")` + `ctx.chatMetadata` persistence + **scanning `ctx.chat` visible prose** (stripping `<div style="display:none">` trigger blocks and `[<NS>_STATUS]` blocks first) so even if the LLM forgot `companions:` on one turn, clicking `下一幕 ▶` or `填入跳转 ▶` still 100% catches introduced cross-scene heroines, illuminates a top-bar `✦ 同行：...` chip, and exposes an editable `👥 跨幕随行同伴` bar + quick-add pills inside `调度 ▾`.
      3. **Clean Non-Overwriting `makeAdvancePrompt` + Multi-Venue Co-Presence Bridges (`getVenueBridge`)**: Never paste a literal static `[<NS>_STATUS]...[/<NS>_STATUS]` block inside the user's advance prompt (which duplicates the status bar in the user bubble and resets live state); instead pass target stage/step parameters in plain text plus a high-priority `【跨幕同行强制保留】` block with **multi-venue diegetic excuses** (concatenating bridges for all matched venues in `A → B` transition nodes so companions follow on-site everywhere naturally).
      4. **Open-Ended `<ns_scene>` Framing**: Label node character lists as **baseline cast (`本节基准人物`)**, ban closed-whitelist phrasing (`"仅聚焦于这四位角色"` / `"严格依节点设定决定是否登场"`), and instruct the LLM to merge everyone in `companions:` on-site into the new node's events.
-6. **3-Way Mutually Exclusive Stage-Decoupled Worldbook (`scan_depth: 4`)**:
-   - Every node's `<ns_scene>` is generated in **3 mutually exclusive variants** (`keep/female` with `AND_ANY=0`, `free+erase` with `AND_ALL=3`, `male` with `AND_ANY=0`), guaranteeing **exact 1-of-3 scene activation** across all mode & `sandbox/cosub` combinations, and preserving `selectiveLogic` in standalone worldbook JSON.
+6. **5-Way Mutually Exclusive Stage-Decoupled Worldbook (`scan_depth: 4`, `keep | erase | futa | male | male_flex`)**:
+   - Every node's `<ns_scene>` is generated in **5 mutually exclusive variants** (`[[<NS>_NPC:keep]]`, `[[<NS>_NPC:erase]]`, `[[<NS>_NPC:futa]]`, `[[<NS>_NPC:male]]`, `[[<NS>_NPC:male_flex]]`, all with `selective_logic=3` `AND_ALL`), guaranteeing **exact 1-of-5 scene activation** across every mode, `sandbox/cosub`, `canon/custom`, and `keep/erase/futa` combination, and preserving `selectiveLogic` in standalone worldbook JSON.
 7. **CoT-Safe Status Bar & History Stripper Regexes (`<think>` / `<think_nya>` Zero Collision + CJK Stage Support)**:
    - Negative lookaheads prevent `<think>`, `<thinking>`, `<thought>`, `<think_nya>`, or `<report_nya>` drafts from swallowing closing CoT tags or `<game>` prose; stage patterns explicitly support both ASCII and Chinese chapter prefixes (`R1`, `旧1`, `间1`, `一1`, `二1`, `番1`).
 8. **18+ Adult Cast Baseline**: All characters (including petite/immortal/bionic characters and player companions) are explicitly anchored as 18+ adult women, scrubbing minor/doll refusal triggers across prose and metadata.
@@ -59,7 +64,7 @@ Convert or upgrade Pixiv novel TXT/EPUB works into a **single unified SillyTaver
 Reference benchmarks in `./角色卡/PIXIV量产卡/更新版v3/`:
 - **3rd-Person Epic Fantasy + 摆法 A Co-Sub Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/月见_深渊魔帝艾拉蒂雅/` (`v3.6`: 70 Nodes / 210 Sub-Openings across 6 Volumes, Dark-Gold Obsidian UI, **摆法 A `sandbox | cosub` 女伴同受调教**, 6-Volume Nested-Regex Packs, Yuri Construct Preservation, CJK Stage Codes)
 - **1st-Person Modern Sci-Fi + Multi-Route Male + Custom Heroine + Easter-Egg Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/Syolily_我居然被机器人保姆调教了/` (`v3.9`: 24 Main Nodes + 5 Stitched Alien-Envoy Easter-Egg Nodes `X01~X05` = 99 Sub-Openings, `segs_first` Base + Sparse Patches, **男主 5 路线 (`supreme/reversal/protector/insider/custom_male`) + 女主自定义姓名人设 (`canon/custom`) + `companions` 跨幕随行双保险防丢人**, `xcast: solo | full` 仅希蓉精简/全彩蛋双阵容防抢戏切换, 6-Act Nested Regex)
-- **3rd-Person Multi-World Trials + Zero-TSF Pure Female Heroine + Full v3.9.1 Matrix**: `./角色卡/PIXIV量产卡/更新版v3/闲读_无限之淫神的诅咒/` (`v3.3`: 119 Nodes / 357 ~1000-char 3-Paragraph Sub-Openings across 6 Worlds, Amethyst-Abyss UI, `sandbox | cosub`, 5 Male Routes, `canon | custom` Heroine Override, 6-Pack Nested Regex)
+- **3rd-Person Multi-World Trials + Zero-TSF + Futa-Yuri (`v3.10.0` Full Matrix) Benchmark**: `./角色卡/PIXIV量产卡/更新版v3/闲读_无限之淫神的诅咒/` (`v3.4`: 40 Nodes / 120 ~1000-char Sub-Openings across 5 Volumes, Amethyst-Abyss UI, `keep | erase | futa` 扶她百合三舞台, `sandbox | cosub`, 5 Male Routes, `canon | custom` Heroine Override, 5-Pack Nested Regex) & `./角色卡/PIXIV量产卡/更新版v3/闲读_魔域降临/` (`v3.2`: 48 Nodes / 144 Sub-Openings, `keep | erase | futa` 扶她百合三舞台 + Full v3.10.0 Matrix)
 
 ---
 
@@ -95,34 +100,37 @@ Pixiv Novel Sources (audit ALL TXT chapters, POV, cast, fetish structure & aesth
 
 1. **100% Paragraph Coverage & Sparse `"si:pi"` Patches**:
    - Verify 100% source paragraph coverage; slice each chapter into `3–5` natural sub-openings (`events` length == `segs` length).
-   - Store one canonical base array (`segs` or `segs_first`) and build sparse paragraph patches (`pe`, `pm`, `pf` / `p3`, keyed by `"si:pi"` where `bsg.split("\n\n").length === tsg.split("\n\n").length`), asserting lossless reconstruction (`reconstruct(base, patches) == target`).
-2. **Complete `meta_erase` & `meta_male` (Including Neighbor Titles & Active Character Blurbs)**:
-   - Include `short_title`, `full_title`, `subtitle`, `prev_title`, `next_title`, `location`, `<heroine>_stage`, `<heroine>_equipment`, `<heroine>_mental`, `milestone`, `plot_detail`, `active_characters`, `events`, and `prefs` inside both `meta_erase` and `meta_male`.
+   - Store one canonical base array (`segs` or `segs_first`) and build sparse paragraph patches (`pe`, `pf`, `pm` / `p3`, keyed by `"si:pi"` where `bsg.split("\n\n").length === tsg.split("\n\n").length`), asserting lossless reconstruction (`reconstruct(base, patches) == target`).
+2. **Complete `meta_erase`, `meta_futa` & `meta_male` (Including Neighbor Titles & Active Character Blurbs)**:
+   - Include `short_title`, `full_title`, `subtitle`, `prev_title`, `next_title`, `location`, `<heroine>_stage`, `<heroine>_equipment`, `<heroine>_mental`, `milestone`, `plot_detail`, `active_characters`, `events`, and `prefs` inside `meta_erase`, `meta_futa`, and `meta_male`.
    - Run global proper-noun and gender-label replacements across `prev_title`, `next_title`, AND `active_characters` role blurbs (watch out for phrases like `"在场唯一男性"` inside character descriptions!).
-   - Programmatically assert **zero** banned male names, male mob labels (`男人`, `男性`, `雄性`, `壮汉`, `混混`, `盗贼`, `卫兵队长`, `教皇`, `干爹`, `父亲`, etc.), standalone male pronouns `他` (protecting neutral compounds `其他/他人/他处/他日/他乡/他国`), and non-yuri male anatomical terms across `meta_erase` + `clean_er_segs`.
-3. **Positive Framing in `erase` Worldbook Entries**:
-   - **Never** write negative disclaimers containing banned words inside `erase` `<ns_scene>` or `<ns_npc_erase>` entries (e.g., writing `"已清退一切男性角色"` literally injects `"男性"` into the `erase` prompt and fails zero-leak checks!). Always frame positively: `"本局为全女角纯净舞台"`.
+   - **Strict Separation Between `erase` and `futa`**:
+     - `meta_erase` + `segs_erase`: Programmatically assert **zero** banned male names, male mob labels (`男人`, `男性`, `雄性`, `壮汉`, `混混`, `盗贼`, etc.), standalone male pronouns `他` (protecting neutral compounds `其他/他人/他处/他日/他乡/他国`), AND **zero** dual-gender/phallic anatomical terms (converting them into diegetic arcane/automated constructs).
+     - `meta_futa` + `segs_futa`: Programmatically assert **zero** banned male names, male mob labels, and standalone male pronouns `他` (`100%` female/futanari cast using `她`), while preserving physical futanari domination tension and labeling replaced counterparts as 18+ alluring futanari women!
+3. **Positive Framing in `erase` & `futa` Worldbook Entries**:
+   - **Never** write negative disclaimers containing banned words inside `erase` or `futa` `<ns_scene>` / `<ns_npc_*>` entries (e.g., writing `"已清退一切男性角色"` literally injects `"男性"` into the prompt and fails zero-leak checks!). Always frame positively: `"本局为全女角纯净舞台"` or `"本局为全员高颜值女性与扶她御姐主导的扶她百合舞台"`.
 
 ---
 
-## Step ③: Open-Cast 3-Way Worldbook, Companion Continuity & "摆法 A" Entries (`build_v3.py`)
+## Step ③: Open-Cast 5-Way Worldbook, Futa-Yuri Profiles, Companion Continuity & "摆法 A" Entries (`build_v3.py`)
 
-1. **Constant & Mode/Stance Entries (`Order 100..119`)**:
+1. **Constant & Mode/Stance/Stage Entries (`Order 100..120`)**:
    - `Order 100..103` (`constant: True`):
      - Core rules (`depth: 4`): Include an explicit **Cross-Scene Companion Continuity Iron Law (`跨幕同行继承铁律`)** — once any stitched Easter-egg heroine, tamed supporting character, or player-introduced character enters play (`companions`), switching scenes or advancing nodes **never** erases or sidelines them; arrange a plausible venue-matched excuse to bring them on-site into the new scene.
      - Roadmap (`depth: 4`) & sub-step pacing (`depth: 2`, reminding the LLM that `【阶段推进确认】` carries over all `companions` on-site).
      - Status output protocol (`depth: 1`): Include `companions:` (`无` when none introduced; otherwise persistent names & co-presence status across turns), and forbid literal `[<NS>_STATUS]` inside `<think>` / `<thinking>` / `<thought>` / `<think_nya>` / `<report_nya>` blocks.
-   - `Order 104..110` (`depth: 2`): `free`, `sandbox`, optional `cosub`, `male` (`100%` on-site), `female`, `keep`, and `erase` (positively framed and welcoming introduced female companions).
-   - `Order 111..119` (`depth: 2`): 5 passerby role entries + (when using 摆法 A) 4 female co-sub companion role entries (`maid_peer`, `nun_peer`, `noble_peer`, `soul_peer`).
-2. **Enriched 18+ Co-Tamable Female Profiles (`Order 200..215`, `depth: 4`)**:
-   - Every female character gets vivid 18+ appearance/attire details + psychological soft spots + explicit `male` co-taming, `cosub`/`erase` dual-taming hooks, and cross-scene co-presence instructions.
-   - Gate the male NPC archive strictly with `selective: True, secondary_keys: ["[[<NS>_NPC:keep]]"], selective_logic: 0`.
-   - On 0th-floor main-node openings (`N01..`), omit unnecessary Easter-egg heroine names from `<div style="display:none">` unless the node is `X01..` or `customNote` mentions her, preventing false-positive turn-1 profile activation while `[[<NS>_XCAST:solo/full]]` still gates worldbook rules cleanly.
-3. **Open-Cast 3-Way Mutually Exclusive `<ns_scene>` Node Entries (`depth: 2`)**:
-   - Emit `npc_policy: "male"` (`[[<NS>_NPC:male]]`) in `male` mode while allowing both `free` and `female` modes to toggle `keep | erase`:
-     - `Order 300 .. 300+N-1` (`keep` — serves `free+keep`, `cosub+keep`, `female+keep`): `secondary_keys=["[[<NS>_NPC:keep]]"]`, `selective_logic=3` (`AND_ALL`).
-     - `Order 300+N .. 300+2N-1` (`erase` — serves `free+erase`, `cosub+erase`, `female+erase`): `secondary_keys=["[[<NS>_NPC:erase]]"]`, `selective_logic=3` (`AND_ALL`), formatted from `meta_erase`.
-     - `Order 300+2N .. 300+3N-1` (`male` — serves all 5 `male` routes `supreme / reversal / protector / insider / custom_male`): `secondary_keys=["[[<NS>_VIEW:male]]"]`, `selective_logic=3` (`AND_ALL`), formatted neutrally so non-`supreme` male routes never inherit forced boss assumptions.
+   - `Order 104..111` (`depth: 2`): `free`, `sandbox`, optional `cosub`, `male` (`100%` on-site), `female`, `keep`, `erase`, and **`futa` (`[[<NS>_NPC:futa]]` — positively framed 18+ Futa-Yuri stage rule)**.
+   - `Order 112..120` (`depth: 2`): 5 passerby role entries + (when using 摆法 A) 4 female co-sub companion role entries + 5 male route entries + custom heroine override entry.
+2. **Enriched 18+ Co-Tamable Female & Futanari Counterpart Profiles (`Order 200..216`, `depth: 4`)**:
+   - Every female character gets vivid 18+ appearance/attire details + psychological soft spots + explicit `male` co-taming, `cosub`/`erase`/`futa` dual-taming hooks, and cross-scene co-presence instructions.
+   - Add a dedicated **18+ Futanari Dominator / Counterpart Profile (`secondary_keys: ["[[<NS>_NPC:futa]]"], selective_logic: 3`)** isolated from `erase` (`secondary_keys: ["[[<NS>_NPC:erase]]", "[[<NS>_NPC:male_flex]]"], selective_logic: 0`) and `keep` (`secondary_keys: ["[[<NS>_NPC:keep]]"], selective_logic: 3`).
+3. **Open-Cast 5-Way Mutually Exclusive `<ns_scene>` Node Entries (`depth: 2`)**:
+   - Allow both `free` and `female` modes to toggle `keep | erase | futa`, while `male` routes emit `male` (`supreme`) or `male_flex` (4 flexible routes):
+     - `Order 300 .. 300+N-1` (`keep` — `free+keep`, `cosub+keep`, `female+keep`): `secondary_keys=["[[<NS>_NPC:keep]]"]`, `selective_logic=3`.
+     - `Order 300+N .. 300+2N-1` (`erase` — `free+erase`, `cosub+erase`, `female+erase`): `secondary_keys=["[[<NS>_NPC:erase]]"]`, `selective_logic=3`, formatted from `meta_erase`.
+     - `Order 300+2N .. 300+3N-1` (`futa` — `free+futa`, `cosub+futa`, `female+futa` **女主-扶她百合**): `secondary_keys=["[[<NS>_NPC:futa]]"]`, `selective_logic=3`, formatted from `meta_futa`.
+     - `Order 300+3N .. 300+4N-1` (`male` — `male+supreme`): `secondary_keys=["[[<NS>_NPC:male]]"]`, `selective_logic=3`, formatted from `meta_male`.
+     - `Order 300+4N .. 300+5N-1` (`male_flex` — `male + reversal/protector/insider/custom_male`): `secondary_keys=["[[<NS>_NPC:male_flex]]"]`, `selective_logic=3`, formatted neutrally from `meta_erase`.
    - **Never word `<ns_scene>` as a closed cast whitelist**: Title the cast section `【本节基准人物档案（若前文或 companions 已有其他女伴入局，须全程随行并入现场，严禁清退）】` (and note `[[<NS>_FEM:custom]]` custom-heroine override on the heroine slot) so the LLM never purges carried-over companions or reverts custom heroine settings upon node advance!
    - Always copy `"selectiveLogic": ext.get("selectiveLogic", 0)` into standalone worldbook JSON entries!
 
