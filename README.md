@@ -6,7 +6,7 @@
 - **目录数据索引**：`cards.json` / `catalog.js`
 - **单作品卷宗说明**：`docs/*.md`
 - **早期服务器归档直链包**：`downloads/*.png`（仅限老服务器 / 旅程服务器经典归档卡）
-- **v3.9 制卡 Agent Skill**：[`skills/sillytavern-pixiv-card/`](skills/sillytavern-pixiv-card/)（全本子段开局切片、正则套正则按需分包、多路线男主与自定义女主覆写、跨幕随行保活世界书、防 CoT 碰撞状态栏规范及参考模板）
+- **v3.11 制卡 Agent Skill**：[`skills/sillytavern-pixiv-card/`](skills/sillytavern-pixiv-card/)（全本子段开局切片、正则套正则按需分包、三视角与原著/纯女净版/扶她百合三舞台、男主五路线定制、女主换名换设定物理隔离、跨幕随行防丢人世界书、防 CoT 碰撞状态栏规范及参考模板）
 
 > **分发说明**：
 > 1. **类脑新服务器发布作品**：网页端仅展示故事总介绍、登场人物与章节节点概览，不存放卡片文件，点击「前往 Discord」直达对应发布帖获取。

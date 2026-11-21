@@ -1,11 +1,16 @@
 ---
 name: sillytavern-pixiv-card
-description: Build or upgrade Pixiv novel SillyTavern V2/V3 character cards (v3.10+ card-specific architecture). Use when the user asks to create, refactor, or upgrade a Pixiv character card (角色卡/酒馆卡), extract 100% full-novel sub-openings (开局), build nested-regex per-act packs (正则套正则), add female companion co-submissive modes (摆法A·女伴同受调教/双姝共受), add multi-archetype male lead routes & custom male/female protagonist name+persona overrides (男主多路线下克上/共犯/自拟 & 女主换名换设定), add Futa-Yuri stage transformation (扶她百合·其他男角替换为扶她女角 `npc_policy: futa`), stitch cross-book Easter-egg arcs with anti-crowding cast toggles (solo/full), preserve introduced or recruited companions across scene transitions (跨幕随行防丢人/切场景保留角色), purify NPC-erased modes, prevent CoT status-bar regex collisions, enhance co-tamable female supporting cast, or deploy cards to SillyTavern servers (archiving prior versions locally while keeping only the latest version on the server).
+description: "【角色卡skill】制作、重构或升级 PIXIV/长篇成人小说 SillyTavern V2/V3 独立酒馆角色卡（v3.11+ 架构：PNG+独立世界书）。支持 100% 原文子开局切片、正则套正则按需分包面板、三视角（自由沙盒/双姝共受摆法A、男主5路线+完全自拟、女主本尊/自定义换名物理隔离）、三舞台（原著/纯女净版/扶她百合 futa）、跨幕随行同伴双保险防丢人、防 CoT 碰撞状态栏，以及部署到 SillyTavern 服务器（本地归档旧版，服务器只留最新版）。（注：正剧网文同人卡使用项目内 novel-fanfic-card；「我的老婆们」单角色人设资料库使用 st-character-lore；具体玩法与剧场玩法分别使用 st-concrete-play 与 st-theater-play。）"
 metadata:
-  version: "3.10.0"
+  version: "3.11.0"
 ---
 
-# SillyTavern Pixiv Card Maker & Upgrader (v3.10.0 Card-Specific Architecture)
+# 【角色卡skill】SillyTavern PIXIV 小说角色卡制作与升级（v3.11.0 架构）
+
+> **四大酒馆 Skill 体系边界与配套模板**：
+> - **`sillytavern-pixiv-card`（本技能 · 角色卡）**：专管 PIXIV / 长篇成人小说独立酒馆角色卡（`.png` + `<卡名>_世界书_v3.x.json`）。配套前端参考模板位于本技能 `references/panel_template.html`（0楼开局面板）与 `references/status_template.html`（顶栏状态条+调度抽屉）。
+> - **正剧/网文同人角色卡**：使用项目内 `.agents/skills/novel-fanfic-card/`，不与本技能混用。
+> - **角色人设资料库 / 具体玩法 / 剧场玩法**：分别由 `st-character-lore`、`st-concrete-play`、`st-theater-play` 独立负责。
 
 > **Guiding Principle — 一张卡一个策略，Skill 只是辅助底盘**:
 > Every novel has its own narrative perspective (1st-person vs 3rd-person), world mechanics (cybernetic devices vs abyssal/temple magic constructs), visual aesthetic, and fetish appeal. **Never mechanically clone another card's UI color palette, base POV, or mode switches.** Audit each novel's specific strengths first, preserve its bespoke visual identity (e.g., Dark-Gold Obsidian `#110f0d/#c9a84c` for dark fantasy vs Cyan-Mint for sci-fi), and activate only the mode extensions that genuinely elevate that work.
@@ -180,7 +185,7 @@ Pixiv Novel Sources (audit ALL TXT chapters, POV, cast, fetish structure & aesth
    - Simulate World Info activation across all `N` nodes × all mode/stance/xcast combinations, verifying **exact 1-of-3** (or exact `1-of-6` Easter-egg) `<ns_scene>` activation, **0** banned male tokens across all active entries in `erase`, **0** premature Easter-egg profile activation when `companions: 无` on main nodes, and **100%** Easter-egg profile keep-alive across all nodes when `companions` contains the introduced heroine.
    - Test genuine JS `RegExp` execution on `<think_nya>...[STATUS] draft...</think_nya><game>prose</game>[STATUS]...companions:...` across both ASCII and CJK stage codes.
    - Run all volume packs through the chained nested regexes inside Node `vm` across sub-openings + `status_template.html` (`调度 ▾`, auto-detection of companions from visible `ctx.chat` prose even when omitted in `rawStatus`, multi-venue `makeAdvancePrompt` bridges, and absence of literal `[<NS>_STATUS]` inside user advance prompts).
-2. **SillyTavern Server Deployment (Server Latest-Only Cleanup & `settings.json` Schema Rule)**:
+2. **SillyTavern Server Deployment (SillyTavern Server Latest-Only Cleanup & `settings.json` Schema Rule)**:
    - Upload the new `<CardName>.png` to `data/default-user/characters/` and `<WorldbookName>.json` to `data/default-user/worlds/`, verify both exist and are non-empty, create `chats/<CardName>`, and remove stale `thumbnails/avatar/<CardName>.png`.
-   - **Server Latest-Only Rule (`服务器只保留最新版`)**: Once the new version is verified on the server, remove any superseded older versions of the same work (`_v<old>.png`, `v1.x.png`, unversioned old PNGs, and old worldbook `.json` files) from `characters/`, `worlds/`, and `thumbnails/avatar/` (and remove empty old chat dirs if unused), while keeping local `历史版本/v<old>/` archives intact on Mac.
+   - **Server Latest-Only Rule (`服务器只保留最新版`)**: Once the new version is verified on the SillyTavern server, remove any superseded older versions of the same work (`_v<old>.png`, `v1.x.png`, unversioned old PNGs, and old worldbook `.json` files) from `characters/`, `worlds/`, and `thumbnails/avatar/` (and remove empty old chat dirs if unused), while keeping local `历史版本/v<old>/` archives intact on Mac.
    - **Schema Warning**: In SillyTavern's `settings.json`, `s["extension_settings"]["regex"]` is a **`list`** of global regex scripts (NOT a `dict`!). Never call `.setdefault()` on `extension_settings["regex"]`; always whitelist character regexes by appending both `"<CardName>.png"` and `"<CardName>"` to `s["extension_settings"].setdefault("character_allowed_regex", [])` while pruning deleted old-version entries from that list.
